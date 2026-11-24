@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="ZORO SECURITY - منصة أمن سيبراني متكاملة لتشفير النصوص والملفات، إخفاء البيانات في الصور، الفحص الأمني، والبصمة الرقمية.">
+    <meta name="theme-color" content="#050914">
+    <title>ZORO SECURITY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='zoro_ui_upgrade.css') }}">
+</head>
+
+<body>
+    <div class="bg-ambient" aria-hidden="true"></div>
+    <div class="bg-mesh" aria-hidden="true"></div>
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="topbar-right">
+                <button type="button" id="menuToggleBtn" class="icon-btn hamburger-btn" aria-label="فتح القائمة"
+                    onclick="toggleSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <button type="button" class="brand-btn" onclick="navigateTo('dashboard')">
+                    <div class="z-shield-logo">
+                        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                            <path d="M24 3L6 10.5V22.5C6 33.8 13.7 43.4 24 46C34.3 43.4 42 33.8 42 22.5V10.5L24 3Z"
+                                stroke="currentColor" stroke-width="2.6" fill="rgba(16, 185, 129, 0.14)" />
+                            <path d="M16 16.5H32L16.5 32H32" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="brand-meta">
+                        <span class="brand-name">ZORO SECURITY</span>
+                        <span class="brand-sub" id="currentPageLabel">الرئيسية</span>
+                    </div>
+                </button>
+            </div>
+
+            <div class="topbar-left">
+                <button type="button" class="live-pill" onclick="navigateTo('status')" title="عرض حالة النظام">
+                    <span class="live-dot"></span>
+                    <span id="topStatusText">النظام يعمل</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <aside id="sidebarDrawer" class="sidebar-drawer" aria-hidden="true">
+        <div class="drawer-header">
+            <div class="drawer-brand">
+                <div class="z-shield-logo small">
+                    <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <path d="M24 3L6 10.5V22.5C6 33.8 13.7 43.4 24 46C34.3 43.4 42 33.8 42 22.5V10.5L24 3Z"
+                            stroke="currentColor" stroke-width="2.6" fill="rgba(16, 185, 129, 0.16)" />
+                        <path d="M16 16.5H32L16.5 32H32" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div>
+                    <strong>ZORO SECURITY</strong>
+                    <span id="drawerUserSub">منصة ويب مستقلة</span>
+                </div>
+            </div>
+            <button type="button" class="icon-btn close-drawer-btn" aria-label="إغلاق القائمة" onclick="closeSidebar()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" aria-hidden="true">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <nav class="drawer-nav">
+            <span class="drawer-section-label">التنقل والأدوات</span>
+            <button type="button" class="drawer-item active" data-page="dashboard" onclick="navigateTo('dashboard')">
+                <svg class="d-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z" />
+                </svg>
+                <span>الرئيسية</span>
+            </button>
+            <button type="button" class="drawer-item" data-page="tools" onclick="navigateTo('tools')">
+                <svg class="d-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path
+                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                </svg>
+                <span>الأدوات الأمنية المساعدة</span>
+            </button>
+
+            <div class="drawer-divider"></div>
+            <span class="drawer-section-label">النظام والإدارة</span>
+            <button type="button" class="drawer-item" data-page="status" onclick="navigateTo('status')">
+                <svg class="d-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+                <span>حالة النظام والخدمات</span>
+            </button>
+            <button type="button" class="drawer-item" data-page="settings" onclick="navigateTo('settings')">
+                <svg class="d-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1-2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                <span>الإعدادات</span>
+            </button>
+            <button type="button" class="drawer-item" data-page="admin" onclick="navigateTo('admin')">
+                <svg class="d-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <circle cx="12" cy="11" r="2.5" />
+                </svg>
+                <span>لوحة تحكم الأدمن</span>
+            </button>
+            <button type="button" class="drawer-item" data-page="about" onclick="navigateTo('about')">
+                <svg class="d-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                <span>عن ZORO SECURITY</span>
+            </button>
+        </nav>
+
+        <div class="drawer-footer">
+            <span>ZORO SECURITY • سهل الاستخدام. قوي في الحماية.</span>
+        </div>
+    </aside>
+
+    <main class="main-container">
+        <section id="page-dashboard" class="page-view active">
+            <div class="hero-frame">
+                <div class="hero-box">
+                    <div class="hero-main-row">
+                        <div class="z-shield-logo hero">
+                            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                                <path d="M24 3L6 10.5V22.5C6 33.8 13.7 43.4 24 46C34.3 43.4 42 33.8 42 22.5V10.5L24 3Z"
+                                    stroke="currentColor" stroke-width="2.4" fill="rgba(16, 185, 129, 0.18)" />
+                                <path d="M16 16.5H32L16.5 32H32" stroke="#FFFFFF" stroke-width="3.2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <div class="hero-copy">
+                            <div class="hero-brand-line">
+                                <span class="hero-brand-title">ZORO SECURITY</span>
+                                <span class="hero-live-tag"><span class="live-dot"></span> CYBER DEFENSE SUITE</span>
+                            </div>
+                            <h1 class="hero-headline">أمنك الرقمي يبدأ من هنا.</h1>
+                            <p>منصة أمن سيبراني متكاملة تجمع بين قوة التشفير الحديث، الفحص الأمني، البصمة الرقمية، ومسار
+                                تعلم الأمن السيبراني في تجربة واحدة بسيطة وواضحة.</p>
+                        </div>
+                    </div>
+
+                    <div class="cyber-ticker" dir="ltr" aria-label="Cybersecurity highlights">
+                        <div class="ticker-track">
+                            <div class="ticker-group">
+                                <span class="ticker-item"><i class="t-dot"></i>CYBERSECURITY</span>
+                                <span class="ticker-item"><i class="t-dot"></i>AES-256-GCM</span>
+                                <span class="ticker-item"><i class="t-dot"></i>CHACHA20-POLY1305</span>
+                                <span class="ticker-item"><i class="t-dot"></i>RSA-2048</span>
+                                <span class="ticker-item"><i class="t-dot"></i>ZERO-TRUST PRIVACY</span>
+                                <span class="ticker-item"><i class="t-dot"></i>THREAT &amp; URL SCANNER</span>
+                                <span class="ticker-item"><i class="t-dot"></i>SHA-3 DIGITAL FINGERPRINT</span>
+                                <span class="ticker-item"><i class="t-dot"></i>CYBER ROADMAP</span>
+                            </div>
+                            <div class="ticker-group" aria-hidden="true">
+                                <span class="ticker-item"><i class="t-dot"></i>CYBERSECURITY</span>
+                                <span class="ticker-item"><i class="t-dot"></i>AES-256-GCM</span>
+                                <span class="ticker-item"><i class="t-dot"></i>CHACHA20-POLY1305</span>
+                                <span class="ticker-item"><i class="t-dot"></i>RSA-2048</span>
+                                <span class="ticker-item"><i class="t-dot"></i>ZERO-TRUST PRIVACY</span>
+                                <span class="ticker-item"><i class="t-dot"></i>THREAT &amp; URL SCANNER</span>
+                                <span class="ticker-item"><i class="t-dot"></i>SHA-3 DIGITAL FINGERPRINT</span>
+                                <span class="ticker-item"><i class="t-dot"></i>CYBER ROADMAP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider">
+                <span>أقسام المنصة ووحداتها</span>
+            </div>
+
+            <div class="portal-grid">
+                <button type="button" class="portal-card tone-emerald" onclick="navigateTo('crypto-hub')">
+                    <div class="card-top-row">
+                        <div class="rect-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="11" width="18" height="11" rx="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </div>
+                        <span class="card-code">01 / CRYPTOGRAPHY</span>
+                    </div>
+                    <h2>خدمات التشفير</h2>
+                    <p>تشفير وفك تشفير النصوص العربية والإنجليزية، وحماية الصور والملفات حتى 100 ميجابايت بأمان كامل.
+                    </p>
+                    <div class="card-chips">
+                        <span>تشفير نصوص</span>
+                        <span>صور وملفات .zoro</span>
+                        <span>AES &amp; ChaCha20</span>
+                    </div>
+                    <div class="card-foot">
+                        <span>الدخول لخدمات التشفير</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                    </div>
+                </button>
+
+                <button type="button" class="portal-card tone-blue" onclick="navigateTo('scanner')">
+                    <div class="card-top-row">
+                        <div class="rect-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                <path d="m9 12 2 2 4-4" />
+                            </svg>
+                        </div>
+                        <span class="card-code">02 / SECURITY SCANNER</span>
+                    </div>
+                    <h2>الفحص الأمني</h2>
+                    <p>فحص الروابط المشبوهة بحماية SSRF، تحليل الملفات، واختبار قوة كلمات المرور محلياً دون إرسالها.</p>
+                    <div class="card-chips">
+                        <span>فحص الروابط</span>
+                        <span>فحص الملفات</span>
+                        <span>قوة كلمات المرور</span>
+                    </div>
+                    <div class="card-foot">
+                        <span>بدء الفحص الأمني</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                    </div>
+                </button>
+
+                <button type="button" class="portal-card tone-cyan" onclick="navigateTo('hashing')">
+                    <div class="card-top-row">
+                        <div class="rect-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4" />
+                                <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" />
+                                <path d="M8.65 22c.21-.66.45-1.32.57-2" />
+                                <path d="M9 6.8a6 6 0 0 1 9 5.2v2" />
+                                <path d="M15 22a6 6 0 0 0 1-3.3V12a3 3 0 0 0-3-3 3 3 0 0 0-3 3v3a8 8 0 0 1-.8 3.5" />
+                            </svg>
+                        </div>
+                        <span class="card-code">03 / HASHING</span>
+                    </div>
+                    <h2>البصمة الرقمية</h2>
+                    <p>توليد بصمات رياضية فريدة للنصوص والملفات ومقارنة البصمات للتحقق من عدم تعرض البيانات للتعديل.</p>
+                    <div class="card-chips">
+                        <span>SHA-256</span>
+                        <span>SHA-512</span>
+                        <span>SHA-3 &amp; مقارنة</span>
+                    </div>
+                    <div class="card-foot">
+                        <span>فتح البصمة الرقمية</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                    </div>
+                </button>
+
+                <button type="button" class="portal-card tone-amber" onclick="navigateTo('guide')">
+                    <div class="card-top-row">
+                        <div class="rect-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                            </svg>
+                        </div>
+                        <span class="card-code">04 / GUIDE &amp; ENCYCLOPEDIA</span>
+                    </div>
+                    <h2>دليل خدمات المنصة والموسوعة</h2>
+                    <p>شرح مفصل لكل خدمات ZORO SECURITY وفوائدها، بالإضافة إلى موسوعة لآلية عمل خوارزميات التشفير.</p>
+                    <div class="card-chips">
+                        <span>شرح الخدمات</span>
+                        <span>فوائدها العملية</span>
+                        <span>موسوعة الخوارزميات</span>
+                    </div>
+                    <div class="card-foot">
+                        <span>استعراض الدليل والموسوعة</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                    </div>
+                </button>
+
+                <button type="button" class="portal-card wide-card tone-purple" onclick="navigateTo('roadmap')">
+                    <div class="wide-card-inner">
+                        <div class="wide-left">
+                            <div class="card-top-row">
+                                <div class="rect-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <circle cx="6" cy="19" r="3" />
+                                        <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
+                                        <circle cx="18" cy="5" r="3" />
+                                    </svg>
+                                </div>
+                                <span class="card-code">05 / CYBERSECURITY ROADMAP</span>
+                            </div>
+                            <h2>خطة ومسار تعلم الأمن السيبراني</h2>
+                            <p>مسار تعليمي شامل ومتدرج من الأساسيات حتى الاحتراف مع رسوم ومخططات توضيحية للمراحل:
+                                الشبكات، أنظمة التشغيل، البرمجة، التشفير، والدفاع والهجوم السيبراني.</p>
+                            <div class="card-chips">
+                                <span>الشبكات والبروتوكولات</span>
+                                <span>Linux &amp; Windows</span>
+                                <span>التشفير والعملات</span>
+                                <span>Blue &amp; Red Team</span>
+                            </div>
+                        </div>
+                        <div class="wide-action-box">
+                            <span class="wide-badge">خريطة طريق شاملة</span>
+                            <div class="card-foot">
+                                <span>استكشاف المسار الكامل</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </section>
+
+        <section id="page-crypto-hub" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ العودة للرئيسية</button>
+                <h2>خدمات التشفير</h2>
+            </div>
+            <p class="page-intro">اختر نوع البيانات التي ترغب في تشفيرها أو فك تشفيرها:</p>
+
+            <div class="hub-choice-grid">
+                <button type="button" class="hub-choice-card" onclick="navigateTo('text')">
+                    <div class="hub-icon tone-emerald">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                    </div>
+                    <h3>تشفير وفك تشفير النصوص</h3>
+                    <p>تشفير الرسائل والملاحظات بـ AES-256-GCM و ChaCha20 و RSA-2048 والخوارزميات الكلاسيكية.</p>
+                    <span class="card-cta">الدخول لتشفير النصوص ←</span>
+                </button>
+
+                <button type="button" class="hub-choice-card" onclick="navigateTo('files')">
+                    <div class="hub-icon tone-blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                    </div>
+                    <h3>تشفير الصور والملفات</h3>
+                    <p>حماية الصور والمستندات والملفات المضغوطة حتى 100 ميجابايت بامتداد .zoro واسترجاعها كاملة.</p>
+                    <span class="card-cta">الدخول لتشفير الملفات ←</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="page-text" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('crypto-hub')">→ خدمات التشفير</button>
+                <h2>تشفير وفك تشفير النصوص</h2>
+            </div>
+            <div id="textModuleMount"></div>
+        </section>
+
+        <section id="page-files" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('crypto-hub')">→ خدمات التشفير</button>
+                <h2>تشفير الصور والملفات</h2>
+            </div>
+            <div id="filesModuleMount"></div>
+        </section>
+
+        <section id="page-scanner" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>الفحص الأمني</h2>
+            </div>
+            <div id="scannerModuleMount"></div>
+        </section>
+
+        <section id="page-hashing" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>البصمة الرقمية (Hashing)</h2>
+            </div>
+            <div id="hashingModuleMount"></div>
+        </section>
+
+        <section id="page-roadmap" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>خطة ومسار تعلم الأمن السيبراني</h2>
+            </div>
+            <div id="roadmapModuleMount"></div>
+        </section>
+
+        <section id="page-guide" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>دليل خدمات المنصة والموسوعة</h2>
+            </div>
+            <div id="guideModuleMount"></div>
+        </section>
+
+        <section id="page-tools" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>الأدوات الأمنية المساعدة</h2>
+            </div>
+            <div id="toolsModuleMount"></div>
+        </section>
+
+        <section id="page-status" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>حالة النظام والخدمات</h2>
+            </div>
+            <div class="panel">
+                <div class="panel-head">
+                    <h3>الخدمات النشطة حالياً</h3>
+                    <button type="button" class="ghost-btn" onclick="loadSystemHealth()">تحديث الفحص ↻</button>
+                </div>
+                <div id="systemStatusList" class="status-list">
+                    <div class="status-row"><span>جاري فحص حالة الخدمات...</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-settings" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>الإعدادات</h2>
+            </div>
+            <div id="settingsModuleMount"></div>
+        </section>
+
+        <section id="page-admin" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>لوحة تحكم الأدمن</h2>
+            </div>
+            <div id="adminModuleMount"></div>
+        </section>
+
+        <section id="page-about" class="page-view">
+            <div class="page-bar">
+                <button type="button" class="back-pill" onclick="navigateTo('dashboard')">→ الرئيسية</button>
+                <h2>عن ZORO SECURITY</h2>
+            </div>
+            <div class="panel about-hero">
+                <div class="z-shield-logo hero">
+                    <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <path d="M24 3L6 10.5V22.5C6 33.8 13.7 43.4 24 46C34.3 43.4 42 33.8 42 22.5V10.5L24 3Z"
+                            stroke="currentColor" stroke-width="2.4" fill="rgba(16, 185, 129, 0.16)" />
+                        <path d="M16 16.5H32L16.5 32H32" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <h2>ZORO SECURITY</h2>
+                <p class="about-tagline">سهل الاستخدام. قوي في الحماية.</p>
+                <p class="about-desc">منصة ويب متكاملة للأمن السيبراني والتشفير تتيح حماية النصوص والملفات، فحص الروابط
+                    والملفات، حساب البصمة الرقمية، واستعراض مسار التعلم وموسوعة الخوارزميات بوضوح وأمان.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="zoro-footer">
+        <div class="zoro-footer-card">
+            <div class="zoro-credit-box">
+                <span class="zoro-credit-ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" />
+                        <path d="M9 12l2 2 4-4" />
+                    </svg>
+                </span>
+                <div class="zoro-credit-text">
+                    <span class="zoro-credit-label">تصميم وفكرة</span>
+                    <strong class="zoro-designer-name">ENG:-Ayman AL-Hababy</strong>
+                </div>
+            </div>
+
+            <div class="zoro-contact-icons">
+                <a class="zoro-icon-link tg" href="https://t.me/aassm" target="_blank" rel="noopener noreferrer"
+                    title="التواصل عبر تيليجرام" aria-label="تيليجرام">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M21.94 4.66a1.5 1.5 0 0 0-1.56-.24L2.9 11.4a1.25 1.25 0 0 0 .1 2.34l4.46 1.48 1.72 5.36a1.1 1.1 0 0 0 1.84.42l2.58-2.66 4.54 3.34a1.45 1.45 0 0 0 2.28-.88l2.5-14.2a1.5 1.5 0 0 0-.98-1.94zM9.8 14.3l8.74-6.06-6.92 7.56-.34 2.94-1.22-3.82-3.44-1.14 3.18.52z" />
+                    </svg>
+                    <span>تيليجرام</span>
+                </a>
+
+                <a class="zoro-icon-link wa" href="https://wa.me/967784626624" target="_blank" rel="noopener noreferrer"
+                    title="التواصل عبر واتساب" aria-label="واتساب">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.86 9.86 0 0 0 4.74 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.84 9.84 0 0 0 12.04 2zm5.79 14.08c-.24.68-1.42 1.3-1.96 1.38-.5.08-1.14.11-1.84-.11-.43-.14-.98-.32-1.69-.63-2.97-1.28-4.91-4.29-5.06-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.76-2.18 1.04-2.48.27-.3.59-.37.79-.37h.57c.18 0 .43-.07.67.51.25.59.84 2.05.91 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.14 1.01 2.09 1.33 2.39 1.48.3.15.47.12.64-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z" />
+                    </svg>
+                    <span>واتساب</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite">تمت العملية بنجاح</div>
+
+    <script src="{{ url_for('static', filename='js/core.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/text_crypto.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/file_crypto.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/hashing_tool.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/security_tools.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/security_scanner.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/cyber_roadmap.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/guide_encyclopedia.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/platform_settings.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/admin_panel.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/zoro_ui_upgrade.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/stego_ui.js') }}" defer></script>
+</body>
+
+</html>
