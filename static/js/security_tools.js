@@ -250,7 +250,7 @@
             if (typeof window.QRious === "function") {
                 new window.QRious({
                     element: canvas,
-                    value: val,
+                    value: unescape(encodeURIComponent(val)),
                     size: 240,
                     padding: 16,
                     level: "M",
