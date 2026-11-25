@@ -1,3 +1,4 @@
+import threading
 import hashlib
 import mimetypes
 import os
@@ -384,6 +385,8 @@ def apply_security_headers(response):
         "frame-ancestors 'none'; "
         "base-uri 'self';"
     )
+    if request.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "public, max-age=86400"
     if request.path.startswith("/api/admin/"):
         response.headers["Cache-Control"] = (
             "no-store, no-cache, must-revalidate, max-age=0"
@@ -406,10 +409,32 @@ def file_too_large(e):
     )
 
 
+def _record_home_visit_bg(ip: str, device: str, uid: str, fname: str, src: str):
+    try:
+        if not fname:
+            geo = _lookup_geo(ip)
+            fname = f"{device} — 🌍 {geo}" if geo else f"{device} ({ip})"
+        record_activity(
+            {"user_id": uid[:64], "full_name": fname[:100], "source": src[:20] or "web"},
+            "زيارة المنصة",
+            "فتح الصفحة الرئيسية",
+        )
+    except Exception:
+        pass
+
 @app.route("/")
 def home():
     try:
-        record_activity(_extract_user_from_request(), "زيارة المنصة", "فتح الصفحة الرئيسية")
+        ip = _client_ip()
+        uid = (request.headers.get("X-Zoro-User-Id") or "").strip() or f"web_{ip}"
+        fname = (request.headers.get("X-Zoro-Fullname") or "").strip()
+        src = (request.headers.get("X-Zoro-Source") or "web").strip()
+        device = _detect_device_name()
+        threading.Thread(
+            target=_record_home_visit_bg,
+            args=(ip, device, uid, fname, src),
+            daemon=True,
+        ).start()
     except Exception:
         pass
     return render_template("index.html")

@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" media="print" onload="this.media=\'all\'">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='zoro_ui_upgrade.css') }}">
 </head>
@@ -540,6 +540,7 @@
     <div id="toast" class="toast hidden" role="status" aria-live="polite">تمت العملية بنجاح</div>
 
     <script src="{{ url_for('static', filename='js/core.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/admin_panel.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/text_crypto.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/file_crypto.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/hashing_tool.js') }}" defer></script>
@@ -548,7 +549,6 @@
     <script src="{{ url_for('static', filename='js/cyber_roadmap.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/guide_encyclopedia.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/platform_settings.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/admin_panel.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/zoro_ui_upgrade.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/stego_ui.js') }}" defer></script>
 </body>

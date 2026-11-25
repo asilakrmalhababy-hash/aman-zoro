@@ -67,7 +67,11 @@ function closeSidebar() {
 function toggleSidebar() {
     const drawer = document.getElementById("sidebarDrawer");
     if (drawer && drawer.classList.contains("open")) {
-        closeSidebar();
+        try {
+        sessionStorage.setItem("zoro_active_page", key);
+        if (location.hash !== "#" + key) history.replaceState(null, "", "#" + key);
+    } catch (_) {}
+    closeSidebar();
     } else {
         openSidebar();
     }
@@ -223,3 +227,12 @@ function copyText(text) {
 }
 
 loadSystemHealth();
+
+(function () {
+    try {
+        const saved = (location.hash || "").replace(/^#/, "") || sessionStorage.getItem("zoro_active_page") || "";
+        if (saved && saved !== "dashboard" && document.getElementById("page-" + saved)) {
+            navigateTo(saved);
+        }
+    } catch (_) {}
+})();

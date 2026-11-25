@@ -230,6 +230,7 @@
         "</div>";
 
     function clearSession() {
+        try { sessionStorage.removeItem("zoro_adm_sess"); } catch (_) {}
         auth = { username: "", pin: "", role: "admin", fullName: "" };
         data = null;
         document.getElementById("admPinInp").value = "";
@@ -280,6 +281,7 @@
         loginBtn.disabled = true;
         try {
             await admPost("/api/admin/overview", {});
+            try { sessionStorage.setItem("zoro_adm_sess", JSON.stringify({ u: auth.username, p: auth.pin })); } catch (_) {}
             document.getElementById("admLoginBox").classList.add("hidden");
             document.getElementById("admShell").classList.remove("hidden");
             renderAll();
@@ -313,6 +315,7 @@
     document.querySelectorAll("[data-asec]").forEach(function (btn) {
         btn.onclick = function () {
             activeSec = btn.dataset.asec;
+            try { sessionStorage.setItem("zoro_adm_sec", activeSec); } catch (_) {}
             document.querySelectorAll("[data-asec]").forEach(function (b) {
                 b.classList.toggle("active", b.dataset.asec === activeSec);
             });
@@ -504,7 +507,7 @@
                         "</div>"
                         : "") +
                     "</div>" +
-                    '<button type="button" class="ghost-btn ' +
+                    '<button type="button" style="white-space:nowrap;flex-shrink:0;" class="ghost-btn ' +
                     (banned ? "" : "danger-txt") +
                     '" data-ubtn="' +
                     esc(u.user_id) +
@@ -842,4 +845,30 @@
             showToast(e.message);
         }
     };
+
+    (function restoreAdminSession() {
+        try {
+            const raw = sessionStorage.getItem("zoro_adm_sess");
+            if (!raw) return;
+            const saved = JSON.parse(raw);
+            if (!saved || !saved.u || !saved.p) return;
+            auth = { username: saved.u, pin: saved.p, role: "admin", fullName: saved.u };
+            const sec = sessionStorage.getItem("zoro_adm_sec");
+            if (sec && document.getElementById("asec-" + sec)) {
+                activeSec = sec;
+                document.querySelectorAll("[data-asec]").forEach(function (b) {
+                    b.classList.toggle("active", b.dataset.asec === activeSec);
+                });
+                document.querySelectorAll(".asec-pane").forEach(function (p) {
+                    p.classList.toggle("hidden", p.id !== "asec-" + activeSec);
+                });
+            }
+            admPost("/api/admin/overview", {}).then(function () {
+                document.getElementById("admLoginBox").classList.add("hidden");
+                document.getElementById("admShell").classList.remove("hidden");
+                renderAll();
+            }).catch(function () { clearSession(); });
+        } catch (_) {}
+    })();
+
 })();
