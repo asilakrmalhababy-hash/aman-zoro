@@ -324,10 +324,35 @@ def _sync_max_file_limit(settings: dict):
     return mb
 
 
+_settings_cache = {"data": None, "ts": 0.0}
+_ipban_cache = {}
+
+def _cached_settings() -> dict:
+    now = time.time()
+    if _settings_cache["data"] is not None and (now - _settings_cache["ts"]) < 30.0:
+        return _settings_cache["data"]
+    d = get_settings()
+    _settings_cache["data"] = d
+    _settings_cache["ts"] = now
+    return d
+
+def _cached_ip_banned(ip: str) -> tuple:
+    now = time.time()
+    rec = _ipban_cache.get(ip)
+    if rec and (now - rec[2]) < 30.0:
+        return rec[0], rec[1]
+    res = is_ip_banned(ip)
+    if len(_ipban_cache) > 2000:
+        _ipban_cache.clear()
+    _ipban_cache[ip] = (res[0], res[1], now)
+    return res
+
 @app.before_request
 def security_gatekeeper():
+    if request.path.startswith("/static/") or request.path == "/favicon.ico":
+        return None
     ip = _client_ip()
-    ip_banned, ip_reason = is_ip_banned(ip)
+    ip_banned, ip_reason = _cached_ip_banned(ip)
     if ip_banned:
         if request.path.startswith("/api/"):
             return (
@@ -341,7 +366,7 @@ def security_gatekeeper():
             )
         return "<h3>تم حظر الوصول من هذا العنوان بواسطة إدارة ZORO SECURITY.</h3>", 403
 
-    settings = get_settings()
+    settings = _cached_settings()
     max_mb = _sync_max_file_limit(settings)
 
     if request.path.startswith("/api/") and not request.path.startswith("/api/admin/"):
@@ -518,7 +543,7 @@ def api_session_ping():
 
 @app.route("/api/health")
 def api_health():
-    settings = get_settings()
+    settings = _cached_settings()
     maint = settings.get("maintenance_mode") == "1"
     return jsonify(
         {
@@ -627,10 +652,10 @@ def api_admin_ip_ban():
     reason = str(data.get("reason") or "نشاط مخالف").strip()
     try:
         if action == "unban":
-            unban_ip(ip_val)
+            _ipban_cache.clear(); unban_ip(ip_val)
             add_activity_log("admin", adm["full_name"], "فك حظر IP", ip_val)
         else:
-            ban_ip(ip_val, reason=reason)
+            _ipban_cache.clear(); ban_ip(ip_val, reason=reason)
             add_activity_log(
                 "admin", adm["full_name"], "حظر عنوان IP", f"{ip_val} ({reason})"
             )
@@ -738,7 +763,7 @@ def api_admin_settings():
             )
 
         if updates:
-            update_settings(updates)
+            _settings_cache["ts"] = 0.0; update_settings(updates)
             add_activity_log(
                 "admin",
                 adm["full_name"],
