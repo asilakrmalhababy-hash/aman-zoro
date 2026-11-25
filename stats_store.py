@@ -322,6 +322,9 @@ def init_db():
                     "INSERT OR IGNORE INTO admins (admin_id, username, full_name, role, pin_hash, is_primary, is_banned, created_at) VALUES (?, ?, ?, 'super_admin', ?, 1, 0, ?)",
                     ("super_admin_root", "superadmin", "Super Admin (الأساسي)", _hash_pin(default_pin), now_str),
                 )
+        env_pin = os.environ.get("ZORO_ADMIN_PIN", "").strip()
+        if env_pin:
+            db.execute("UPDATE admins SET pin_hash = ?, is_banned = 0 WHERE is_primary = 1", (_hash_pin(env_pin),))
         db.commit()
 
 
