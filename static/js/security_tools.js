@@ -248,15 +248,36 @@
 
         try {
             if (typeof window.QRious === "function") {
+                const tmp = document.createElement("canvas");
                 new window.QRious({
-                    element: canvas,
+                    element: tmp,
                     value: unescape(encodeURIComponent(val)),
-                    size: 240,
-                    padding: 16,
+                    size: 260,
+                    padding: 0,
                     level: "M",
                     background: "#ffffff",
                     foreground: "#090d14",
                 });
+                const tctx = tmp.getContext("2d");
+                const img = tctx.getImageData(0, 0, tmp.width, tmp.height).data;
+                let minX = tmp.width, minY = tmp.height, maxX = 0, maxY = 0;
+                for (let y = 0; y < tmp.height; y++) {
+                    for (let x = 0; x < tmp.width; x++) {
+                        if (img[(y * tmp.width + x) * 4] < 128) {
+                            if (x < minX) minX = x;
+                            if (x > maxX) maxX = x;
+                            if (y < minY) minY = y;
+                            if (y > maxY) maxY = y;
+                        }
+                    }
+                }
+                const cw = Math.max(1, maxX - minX + 1), ch = Math.max(1, maxY - minY + 1);
+                canvas.width = 240; canvas.height = 240;
+                const ctx = canvas.getContext("2d");
+                ctx.imageSmoothingEnabled = false;
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, 240, 240);
+                ctx.drawImage(tmp, minX, minY, cw, ch, 20, 20, 200, 200);
                 hintEl.textContent = "✓ رمز QR قياسي جاهز للمسح بكاميرا الجوال.";
             } else if (await loadQrLibrary()) {
                 await new Promise(function (resolve, reject) {
