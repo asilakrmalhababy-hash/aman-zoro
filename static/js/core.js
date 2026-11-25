@@ -236,3 +236,98 @@ loadSystemHealth();
         }
     } catch (_) {}
 })();
+
+(function initPersistentUserAndHistory() {
+    try {
+        let uid = localStorage.getItem("zoro_uid") || "";
+        if (!uid) {
+            const m = document.cookie.match(/(?:^|;\s*)zoro_uid=([^;]+)/);
+            uid = m ? decodeURIComponent(m[1]) : ("usr_" + Math.random().toString(16).slice(2, 12));
+            localStorage.setItem("zoro_uid", uid);
+        }
+        document.cookie = "zoro_uid=" + encodeURIComponent(uid) + "; path=/; max-age=31536000; SameSite=Lax";
+
+        const _origFetch = window.fetch;
+        window.fetch = function (input, init) {
+            const url = typeof input === "string" ? input : (input && input.url) || "";
+            if (url.startsWith("/api/") || url.includes("/api/")) {
+                init = Object.assign({}, init || {});
+                const hdrs = new Headers(init.headers || {});
+                if (!hdrs.has("X-Zoro-User-Id")) hdrs.set("X-Zoro-User-Id", uid);
+                init.headers = hdrs;
+            }
+            return _origFetch.call(this, input, init);
+        };
+
+        const nav = document.querySelector(".drawer-nav");
+        if (nav && !document.getElementById("zoroMyHistoryBtn")) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.id = "zoroMyHistoryBtn";
+            btn.className = "drawer-item";
+            btn.innerHTML =
+                '<svg class="d-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+                "<span>سجل عملياتي السابقة</span>";
+            btn.onclick = function () {
+                if (typeof closeSidebar === "function") closeSidebar();
+                openMyHistoryModal();
+            };
+            const firstDivider = nav.querySelector(".drawer-divider");
+            if (firstDivider) nav.insertBefore(btn, firstDivider);
+            else nav.appendChild(btn);
+        }
+
+        function openMyHistoryModal() {
+            let modal = document.getElementById("zoroMyHistoryModal");
+            if (!modal) {
+                modal = document.createElement("div");
+                modal.id = "zoroMyHistoryModal";
+                modal.style.cssText = "position:fixed;inset:0;z-index:9999;background:rgba(5,10,20,0.72);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px;";
+                modal.innerHTML =
+                    '<div style="width:100%;max-width:500px;max-height:80vh;display:flex;flex-direction:column;background:var(--bg-card,#0f172a);border:1px solid rgba(148,163,184,0.2);border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.5);">' +
+                    '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(148,163,184,0.15);">' +
+                    '<strong style="font-size:15px;">سجل عملياتي السابقة</strong>' +
+                    '<div style="display:flex;gap:8px;">' +
+                    '<button type="button" id="zoroHistRefresh" class="ghost-btn" style="padding:5px 10px;font-size:12px;">تحديث ↻</button>' +
+                    '<button type="button" id="zoroHistClose" class="ghost-btn" style="padding:5px 10px;font-size:12px;">إغلاق ✕</button>' +
+                    "</div></div>" +
+                    '<div id="zoroHistBody" style="padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;font-size:13px;">جاري تحميل السجل...</div>' +
+                    "</div>";
+                document.body.appendChild(modal);
+                modal.onclick = function (e) { if (e.target === modal) modal.style.display = "none"; };
+                document.getElementById("zoroHistClose").onclick = function () { modal.style.display = "none"; };
+                document.getElementById("zoroHistRefresh").onclick = loadMyHistory;
+            }
+            modal.style.display = "flex";
+            loadMyHistory();
+        }
+
+        async function loadMyHistory() {
+            const body = document.getElementById("zoroHistBody");
+            if (!body) return;
+            body.innerHTML = '<div style="text-align:center;opacity:.7;padding:18px;">جاري تحميل السجل...</div>';
+            try {
+                const res = await fetch("/api/my-history", { cache: "no-store" });
+                const j = await res.json();
+                const list = (j && j.logs) || [];
+                if (!list.length) {
+                    body.innerHTML = '<div style="text-align:center;opacity:.7;padding:22px;">لا توجد عمليات مسجلة لك حتى الآن.</div>';
+                    return;
+                }
+                body.innerHTML = list.map(function (it) {
+                    return (
+                        '<div style="padding:10px 12px;border-radius:12px;background:rgba(148,163,184,0.08);border:1px solid rgba(148,163,184,0.12);text-align:right;">' +
+                        '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                        "<strong>" + _escapeHtml(it.action || "عملية") + "</strong>" +
+                        '<span dir="ltr" style="font-size:11px;opacity:.65;">' + _escapeHtml(it.created_at || "") + "</span>" +
+                        "</div>" +
+                        (it.details ? '<div style="font-size:12px;opacity:.8;margin-top:4px;">' + _escapeHtml(it.details) + "</div>" : "") +
+                        "</div>"
+                    );
+                }).join("");
+            } catch (_) {
+                body.innerHTML = '<div style="text-align:center;color:#f87171;padding:18px;">تعذر تحميل السجل الآن.</div>';
+            }
+        }
+    } catch (_) {}
+})();

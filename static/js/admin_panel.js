@@ -517,12 +517,40 @@
                     '" data-ubanned="' +
                     (banned ? "1" : "0") +
                     '">' +
-                    (banned ? "إلغاء الحظر" : "حظر") +
+(banned ? "إلغاء الحظر" : "حظر") +
                     "</button>" +
-                    "</div>"
+                    '<button type="button" style="white-space:nowrap;flex-shrink:0;padding:8px 10px;" class="ghost-btn" data-uhist="' +
+                    esc(u.user_id) +
+                    '">السجل</button>' +
+                    "</div>" +
+                    '<div class="hidden" data-uhist-box="' +
+                    esc(u.user_id) +
+                    '" style="margin:-4px 0 10px;padding:10px 12px;border-radius:12px;background:rgba(148,163,184,0.07);border:1px solid rgba(148,163,184,0.14);font-size:12px;text-align:right;"></div>'
                 );
             })
             .join("");
+
+        box.querySelectorAll("[data-uhist]").forEach(function (hbtn) {
+            hbtn.onclick = function () {
+                const uid = hbtn.dataset.uhist;
+                const hbox = box.querySelector('[data-uhist-box="' + uid.replace(/"/g, '\\"') + '"]');
+                if (!hbox) return;
+                const willShow = hbox.classList.contains("hidden");
+                hbox.classList.toggle("hidden", !willShow);
+                if (!willShow) return;
+                const ulogs = (data.logs || []).filter(function (l) { return String(l.user_id || "") === uid; });
+                if (!ulogs.length) {
+                    hbox.innerHTML = '<div style="opacity:.7;">لا توجد عمليات مسجلة لهذا المستخدم.</div>';
+                    return;
+                }
+                hbox.innerHTML = ulogs.slice(0, 20).map(function (l) {
+                    return '<div style="padding:6px 0;border-bottom:1px solid rgba(148,163,184,0.12);">' +
+                        '<b>' + esc(l.action || "") + '</b>' +
+                        (l.details ? ' — <span style="opacity:.85;">' + esc(l.details) + '</span>' : '') +
+                        '<div dir="ltr" style="font-size:11px;opacity:.6;margin-top:2px;">' + esc(l.created_at || "") + '</div></div>';
+                }).join("");
+            };
+        });
 
         box.querySelectorAll("[data-ubtn]").forEach(function (btn) {
             btn.onclick = async function () {

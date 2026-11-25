@@ -1,3 +1,4 @@
+import secrets as _secrets
 import threading
 import hashlib
 import mimetypes
@@ -244,7 +245,7 @@ def _lookup_geo(ip: str) -> str:
 
 def _extract_user_from_request() -> dict:
     ip = _client_ip()
-    uid = (request.headers.get("X-Zoro-User-Id") or "").strip()
+    uid = (request.headers.get("X-Zoro-User-Id") or request.cookies.get("zoro_uid") or "").strip()
     fname = (request.headers.get("X-Zoro-Fullname") or "").strip()
     src = (request.headers.get("X-Zoro-Source") or "web").strip()
 
@@ -506,25 +507,55 @@ def _record_home_visit_bg(ip: str, device: str, uid: str, fname: str, src: str):
     except Exception:
         pass
 
+_visit_cooldown = {}
+
 @app.route("/")
 def home():
+    from flask import make_response
+    resp = make_response(render_template("index.html"))
     try:
         ip = _client_ip()
         ua = (request.headers.get("User-Agent") or "").lower()
         if ip in ("127.0.0.1", "::1") or any(b in ua for b in ("render", "go-http-client", "uptimerobot")):
-            return render_template("index.html")
-        uid = (request.headers.get("X-Zoro-User-Id") or "").strip() or f"web_{ip}"
-        fname = (request.headers.get("X-Zoro-Fullname") or "").strip()
-        src = (request.headers.get("X-Zoro-Source") or "web").strip()
-        device = _detect_device_name()
-        threading.Thread(
-            target=_record_home_visit_bg,
-            args=(ip, device, uid, fname, src),
-            daemon=True,
-        ).start()
+            return resp
+        uid = (request.headers.get("X-Zoro-User-Id") or request.cookies.get("zoro_uid") or "").strip()
+        if not uid:
+            uid = f"usr_{_secrets.token_hex(5)}"
+            resp.set_cookie("zoro_uid", uid, max_age=31536000, samesite="Lax", httponly=False)
+        now = time.time()
+        last_t = _visit_cooldown.get(uid, 0.0)
+        if (now - last_t) >= 1800.0:
+            if len(_visit_cooldown) > 5000:
+                _visit_cooldown.clear()
+            _visit_cooldown[uid] = now
+            fname = (request.headers.get("X-Zoro-Fullname") or "").strip()
+            src = (request.headers.get("X-Zoro-Source") or "web").strip()
+            device = _detect_device_name()
+            threading.Thread(
+                target=_record_home_visit_bg,
+                args=(ip, device, uid, fname, src),
+                daemon=True,
+            ).start()
     except Exception:
         pass
-    return render_template("index.html")
+    return resp
+
+
+@app.route("/api/my-history", methods=["GET"])
+def api_my_history():
+    user_info = _extract_user_from_request()
+    uid = user_info["user_id"]
+    try:
+        import stats_store as _ss
+        with _ss._get_conn() as db:
+            rows = db.fetchall(
+                "SELECT action, details, created_at FROM activity_logs WHERE user_id = ? ORDER BY id DESC LIMIT 50",
+                (uid,),
+            )
+            logs = [dict(r) for r in rows]
+        return jsonify({"success": True, "user_id": uid, "logs": logs})
+    except Exception:
+        return jsonify({"success": True, "user_id": uid, "logs": []})
 
 
 @app.route("/api/session/ping", methods=["POST"])
