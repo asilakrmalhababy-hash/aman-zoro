@@ -88,6 +88,28 @@ HASH_FUNCS = {
 }
 
 
+
+_ubans_cache = {}
+def _safe_bg(fn, *args, **kwargs):
+    try:
+        fn(*args, **kwargs)
+    except Exception:
+        pass
+
+def _bg_call(fn, *args, **kwargs):
+    threading.Thread(target=_safe_bg, args=(fn,) + args, kwargs=kwargs, daemon=True).start()
+
+def _cached_user_banned(uid: str) -> tuple:
+    now = time.time()
+    rec = _ubans_cache.get(uid)
+    if rec and (now - rec[2]) < 20.0:
+        return rec[0], rec[1]
+    res = is_user_banned(uid)
+    if len(_ubans_cache) > 2000:
+        _ubans_cache.clear()
+    _ubans_cache[uid] = (res[0], res[1], now)
+    return res
+
 def _client_ip() -> str:
     if TRUST_PROXY:
         forwarded = request.headers.get("X-Forwarded-For", "")
@@ -295,7 +317,7 @@ def _verify_admin_request() -> tuple:
         "lock_until": lock_until,
         "last_fail": now,
     }
-    record_security_event(
+    _bg_call(record_security_event, 
         "محاولة دخول أدمن فاشلة", username or "unknown", ip, f"المحاولة #{fails}"
     )
     return None, err
@@ -373,9 +395,9 @@ def security_gatekeeper():
 
     if request.path.startswith("/api/") and not request.path.startswith("/api/admin/"):
         user_info = _extract_user_from_request()
-        u_banned, u_reason = is_user_banned(user_info["user_id"])
+        u_banned, u_reason = _cached_user_banned(user_info["user_id"])
         if u_banned:
-            record_security_event(
+            _bg_call(record_security_event, 
                 "محاولة وصول مستخدم محظور", user_info["user_id"], ip, request.path
             )
             return (
@@ -394,7 +416,7 @@ def security_gatekeeper():
         except ValueError:
             rpm = 45
         if not _check_rate_limit(ip, rpm):
-            record_security_event(
+            _bg_call(record_security_event, 
                 "تجاوز Rate Limit",
                 user_info["user_id"],
                 ip,
@@ -463,7 +485,7 @@ def apply_security_headers(response):
     response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline'; "
+        "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: blob:; "
@@ -515,7 +537,7 @@ def _record_home_visit_bg(ip: str, device: str, uid: str, fname: str, src: str):
         if not fname:
             geo = _lookup_geo(ip)
             fname = f"{device} — 🌍 {geo}" if geo else f"{device} ({ip})"
-        record_activity(
+        _bg_call(record_activity, 
             {"user_id": uid[:64], "full_name": fname[:100], "source": src[:20] or "web"},
             "زيارة المنصة",
             "فتح الصفحة الرئيسية",
@@ -577,7 +599,7 @@ def api_my_history():
 @app.route("/api/session/ping", methods=["POST"])
 def api_session_ping():
     user_info = _extract_user_from_request()
-    record_activity(user_info, "زيارة المنصة", "دخول عبر المتصفح")
+    _bg_call(record_activity, user_info, "زيارة المنصة", "دخول عبر المتصفح")
     settings = get_settings()
     return jsonify(
         {
@@ -678,7 +700,7 @@ def api_admin_user_ban():
         return jsonify({"success": False, "error": "مدة الحظر غير صالحة."}), 400
     if not uid:
         return jsonify({"success": False, "error": "يرجى تحديد معرّف المستخدم."}), 400
-    set_user_ban(
+    _ubans_cache.clear(); set_user_ban(
         uid,
         banned=banned,
         reason=reason,
@@ -717,7 +739,7 @@ def api_admin_manage():
     if not adm:
         return jsonify({"success": False, "error": err}), 401
     if adm["role"] != "super_admin":
-        record_security_event(
+        _bg_call(record_security_event, 
             "محاولة صلاحية Super Admin",
             adm["username"],
             _client_ip(),
@@ -793,7 +815,7 @@ def api_admin_settings():
         )
 
         if wants_platform_change and adm["role"] != "super_admin":
-            record_security_event(
+            _bg_call(record_security_event, 
                 "محاولة تعديل إعدادات حساسة",
                 adm["username"],
                 _client_ip(),
@@ -844,15 +866,15 @@ def api_scan_url():
     user_info = _extract_user_from_request()
     try:
         report = scan_url_target(target_url)
-        increment_stat("security_scans")
-        record_activity(
+        _bg_call(increment_stat, "security_scans")
+        _bg_call(record_activity, 
             user_info,
             "فحص رابط",
             f"النتيجة: {report['verdict_ar']} | {report['url'][:70]}",
         )
         return jsonify({"success": True, "report": report})
     except ValueError as e:
-        record_activity(user_info, "محاولة فحص رابط مرفوضة", str(e)[:100])
+        _bg_call(record_activity, user_info, "محاولة فحص رابط مرفوضة", str(e)[:100])
         return jsonify({"success": False, "error": str(e)}), 400
     except Exception:
         return jsonify({"success": False, "error": "حدث خطأ أثناء فحص الرابط."}), 500
@@ -875,8 +897,8 @@ def api_scan_file():
         report = scan_uploaded_file(
             file.stream, file.filename, allow_external=allow_external
         )
-        increment_stat("security_scans")
-        record_activity(
+        _bg_call(increment_stat, "security_scans")
+        _bg_call(record_activity, 
             user_info, "فحص ملف", f"{report['filename']} ({report['verdict_ar']})"
         )
         return jsonify({"success": True, "report": report})
@@ -939,8 +961,8 @@ def api_encrypt():
                 400,
             )
 
-        increment_stat("encryptions")
-        record_activity(
+        _bg_call(increment_stat, "encryptions")
+        _bg_call(record_activity, 
             user_info,
             "تشفير نص",
             f"الخوارزمية: {ALGO_NAMES[algorithm]} ({len(text)} حرف)",
@@ -1005,8 +1027,8 @@ def api_decrypt():
                 400,
             )
 
-        increment_stat("decryptions")
-        record_activity(
+        _bg_call(increment_stat, "decryptions")
+        _bg_call(record_activity, 
             user_info, "فك تشفير نص", f"الخوارزمية: {ALGO_NAMES[algorithm]}"
         )
         return jsonify(
@@ -1033,7 +1055,7 @@ def api_generate_rsa():
     user_info = _extract_user_from_request()
     try:
         keys = generate_rsa_keys()
-        record_activity(user_info, "توليد مفاتيح RSA-2048", "زوج مفاتيح عام/خاص")
+        _bg_call(record_activity, user_info, "توليد مفاتيح RSA-2048", "زوج مفاتيح عام/خاص")
         return jsonify(
             {
                 "success": True,
@@ -1073,8 +1095,8 @@ def api_hash_text():
         return jsonify({"success": False, "error": "خوارزمية التجزئة غير مدعومة."}), 400
 
     digest = hash_ctor(text.encode("utf-8")).hexdigest()
-    increment_stat("encryptions")
-    record_activity(user_info, "بصمة نص", f"الخوارزمية: {algo.upper()}")
+    _bg_call(increment_stat, "encryptions")
+    _bg_call(record_activity, user_info, "بصمة نص", f"الخوارزمية: {algo.upper()}")
     return jsonify(
         {
             "success": True,
@@ -1121,9 +1143,9 @@ def api_hash_file():
         if total_size == 0:
             return jsonify({"success": False, "error": "الملف المختار فارغ."}), 400
 
-        increment_stat("files_processed")
+        _bg_call(increment_stat, "files_processed")
         safe_name = os.path.basename(file.filename)
-        record_activity(user_info, "بصمة ملف", f"{safe_name} ({algo.upper()})")
+        _bg_call(record_activity, user_info, "بصمة ملف", f"{safe_name} ({algo.upper()})")
         digest = hasher.hexdigest()
         return jsonify(
             {
@@ -1160,8 +1182,8 @@ def api_file_encrypt():
         temp_path = fc_mod.encrypt_stream_to_temp(
             file.stream, safe_name, password, algorithm=algorithm
         )
-        increment_stat("files_processed")
-        record_activity(user_info, "تشفير ملف", f"{safe_name} ({algorithm.upper()})")
+        _bg_call(increment_stat, "files_processed")
+        _bg_call(record_activity, user_info, "تشفير ملف", f"{safe_name} ({algorithm.upper()})")
         out_name = safe_name + ".zoro"
 
         @after_this_request
@@ -1204,8 +1226,8 @@ def api_file_decrypt():
     try:
         original_name, temp_path = fc_mod.decrypt_stream_to_temp(file.stream, password)
         safe_orig = os.path.basename(original_name) or "decrypted_file"
-        increment_stat("files_processed")
-        record_activity(user_info, "فك تشفير ملف", f"{safe_orig}")
+        _bg_call(increment_stat, "files_processed")
+        _bg_call(record_activity, user_info, "فك تشفير ملف", f"{safe_orig}")
         guessed_mime = mimetypes.guess_type(safe_orig)[0] or "application/octet-stream"
 
         @after_this_request
@@ -1249,8 +1271,8 @@ def api_stego_hide():
         out_buffer = hide_text_in_image(
             image_file.stream, secret_text, password=password
         )
-        increment_stat("files_processed")
-        record_activity(
+        _bg_call(increment_stat, "files_processed")
+        _bg_call(record_activity, 
             user_info, "إخفاء نص داخل صورة", f"{safe_name} (AES-256-GCM + LSB)"
         )
         return send_file(
@@ -1282,8 +1304,8 @@ def api_stego_extract():
     safe_name = os.path.basename(image_file.filename)
     try:
         res = extract_text_from_image(image_file.stream, password=password)
-        increment_stat("decryptions")
-        record_activity(user_info, "استخراج نص من صورة", safe_name)
+        _bg_call(increment_stat, "decryptions")
+        _bg_call(record_activity, user_info, "استخراج نص من صورة", safe_name)
         return jsonify(
             {"success": True, "text": res["text"], "encrypted": res["encrypted"]}
         )

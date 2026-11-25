@@ -1,10 +1,19 @@
-/* Zoro Security — Mobile Smoothness & Clean Layout Polish (Same Identity) */
+/* Zoro Security — Ultra-Smooth Performance & Visual Harmony (Same Identity) */
+*, *::before, *::after { box-sizing: border-box; }
 .panel, .portal-card, .status-row, .adm-stat-card {
   contain: layout style;
+  border-color: rgba(139, 92, 246, 0.22) !important;
+}
+.portal-card {
+  transition: transform 0.16s ease, border-color 0.16s ease !important;
+}
+.portal-card:hover {
+  border-color: rgba(16, 185, 129, 0.55) !important;
 }
 .ghost-btn, .primary-btn {
   white-space: nowrap;
-  min-height: 38px;
+  min-height: 40px;
+  border-radius: 12px !important;
 }
 .adm-nav-tabs {
   display: flex;
@@ -16,33 +25,28 @@
   scrollbar-width: none;
 }
 .adm-nav-tabs::-webkit-scrollbar { display: none; }
-.adm-nav-tabs .adm-tab-btn {
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
-.status-row {
-  gap: 12px;
-  align-items: center;
-}
-.status-row-info {
-  min-width: 0;
-  flex: 1;
-  word-break: break-word;
+.adm-nav-tabs .adm-tab-btn { flex: 0 0 auto; white-space: nowrap; }
+.status-row { gap: 12px; align-items: center; }
+.status-row-info { min-width: 0; flex: 1; word-break: break-word; }
+.qr-out canvas {
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  background: #ffffff;
+  margin: 0 auto;
+  display: block;
 }
 @media (max-width: 768px) {
-  header, .topbar, .sidebar-drawer, .panel {
+  /* إزالة ثقل الـ blur عن البطاقات لتسريع التمرير 60fps على الجوال */
+  .panel, .portal-card, .status-row {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28) !important;
+  }
+  header, .topbar, .sidebar-drawer {
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
   }
-  .portal-grid {
-    gap: 12px !important;
-  }
-  .panel {
-    padding: 16px !important;
-    border-radius: 18px !important;
-  }
-  .adm-kpi-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-  }
+  .portal-grid { gap: 12px !important; }
+  .panel { padding: 16px !important; border-radius: 18px !important; }
+  .adm-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
 }

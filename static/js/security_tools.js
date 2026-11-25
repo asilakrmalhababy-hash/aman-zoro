@@ -247,25 +247,22 @@
         btn.textContent = "جاري الإنشاء...";
 
         try {
-            const loaded = await loadQrLibrary();
-            if (loaded) {
-                await new Promise(function (resolve, reject) {
-                    window.QRCode.toCanvas(
-                        canvas,
-                        val,
-                        {
-                            width: 240,
-                            margin: 2,
-                            errorCorrectionLevel: "M",
-                            color: { dark: "#090d14", light: "#ffffff" },
-                        },
-                        function (err) {
-                            if (err) reject(err);
-                            else resolve();
-                        }
-                    );
+            if (typeof window.QRious === "function") {
+                new window.QRious({
+                    element: canvas,
+                    value: val,
+                    size: 240,
+                    padding: 16,
+                    level: "M",
+                    background: "#ffffff",
+                    foreground: "#090d14",
                 });
-                hintEl.textContent = "رمز QR قياسي جاهز للمسح بكاميرا الجوال.";
+                hintEl.textContent = "✓ رمز QR قياسي جاهز للمسح بكاميرا الجوال.";
+            } else if (await loadQrLibrary()) {
+                await new Promise(function (resolve, reject) {
+                    window.QRCode.toCanvas(canvas, val, { width: 240, margin: 2, errorCorrectionLevel: "M", color: { dark: "#090d14", light: "#ffffff" } }, function (err) { if (err) reject(err); else resolve(); });
+                });
+                hintEl.textContent = "✓ رمز QR قياسي جاهز للمسح بكاميرا الجوال.";
             } else {
                 drawFallbackMatrixQr(val, canvas);
                 hintEl.textContent =

@@ -56,6 +56,8 @@ def hide_text_in_image(image_stream, secret_text: str, password: str) -> io.Byte
         with Image.open(image_stream) as img:
             img.load()
             rgb_img = img.convert("RGB")
+            if max(rgb_img.size) > 1400:
+                rgb_img.thumbnail((1400, 1400))
             width, height = rgb_img.size
             raw_bytes = bytearray(rgb_img.tobytes())
     except Image.DecompressionBombError:
