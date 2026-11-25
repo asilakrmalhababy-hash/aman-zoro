@@ -1,0 +1,48 @@
+/* Zoro Security — Mobile Smoothness & Clean Layout Polish (Same Identity) */
+.panel, .portal-card, .status-row, .adm-stat-card {
+  contain: layout style;
+}
+.ghost-btn, .primary-btn {
+  white-space: nowrap;
+  min-height: 38px;
+}
+.adm-nav-tabs {
+  display: flex;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  gap: 8px;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.adm-nav-tabs::-webkit-scrollbar { display: none; }
+.adm-nav-tabs .adm-tab-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.status-row {
+  gap: 12px;
+  align-items: center;
+}
+.status-row-info {
+  min-width: 0;
+  flex: 1;
+  word-break: break-word;
+}
+@media (max-width: 768px) {
+  header, .topbar, .sidebar-drawer, .panel {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+  .portal-grid {
+    gap: 12px !important;
+  }
+  .panel {
+    padding: 16px !important;
+    border-radius: 18px !important;
+  }
+  .adm-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}

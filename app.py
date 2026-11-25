@@ -1,3 +1,4 @@
+import gzip as _gzip
 import secrets as _secrets
 import threading
 import hashlib
@@ -477,6 +478,21 @@ def apply_security_headers(response):
             "no-store, no-cache, must-revalidate, max-age=0"
         )
         response.headers["Pragma"] = "no-cache"
+    if (
+        response.status_code == 200
+        and not response.direct_passthrough
+        and "gzip" in (request.headers.get("Accept-Encoding") or "").lower()
+        and "Content-Encoding" not in response.headers
+    ):
+        ct = (response.content_type or "").lower()
+        if any(t in ct for t in ("text/", "application/json", "javascript")):
+            raw_data = response.get_data()
+            if len(raw_data) > 1024:
+                gz = _gzip.compress(raw_data, compresslevel=6)
+                response.set_data(gz)
+                response.headers["Content-Encoding"] = "gzip"
+                response.headers["Content-Length"] = str(len(gz))
+                response.headers["Vary"] = "Accept-Encoding"
     return response
 
 
@@ -1281,6 +1297,35 @@ def api_stego_extract():
             500,
         )
 
+
+
+@app.route("/ping")
+def zoro_ping():
+    return "ok", 200
+
+
+@app.errorhandler(500)
+def handle_500_err(e):
+    if request.path.startswith("/api/"):
+        return jsonify({"success": False, "error": "حدث خطأ مؤقت في الخادم، أعد المحاولة بعد ثوانٍ."}), 500
+    return "<h3>حدث خطأ مؤقت في الخادم، يرجى تحديث الصفحة.</h3>", 500
+
+
+def _zoro_keep_alive():
+    import urllib.request as _ur
+    url = (os.environ.get("RENDER_EXTERNAL_URL") or "").strip().rstrip("/")
+    if not url:
+        return
+    while True:
+        time.sleep(600)
+        try:
+            req = _ur.Request(url + "/ping", headers={"User-Agent": "Render-KeepAlive/1.0"})
+            with _ur.urlopen(req, timeout=8) as r:
+                r.read()
+        except Exception:
+            pass
+
+threading.Thread(target=_zoro_keep_alive, daemon=True).start()
 
 init_db()
 
