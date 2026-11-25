@@ -147,23 +147,35 @@ def _lookup_geo(ip: str) -> str:
         return "محلي"
     if ip in _geo_cache:
         return _geo_cache[ip]
-    country_hdr = (request.headers.get("CF-IPCountry") or request.headers.get("X-Country-Code") or "").strip()
     label = ""
     try:
-        r = _requests.get(
-            f"http://ip-api.com/json/{ip}?fields=status,country,city&lang=ar",
-            timeout=1.5,
-        )
+        r = _requests.get(f"http://ip-api.com/json/{ip}?fields=status,country,city&lang=ar", timeout=2.0)
         if r.ok:
             d = r.json()
             if d.get("status") == "success":
-                c = (d.get("country") or "").strip()
-                city = (d.get("city") or "").strip()
+                c, city = (d.get("country") or "").strip(), (d.get("city") or "").strip()
                 label = f"{c} ({city})" if (c and city and city != c) else (c or city)
     except Exception:
         pass
-    if not label and country_hdr and country_hdr != "XX":
-        label = country_hdr
+    if not label:
+        try:
+            r = _requests.get(f"https://ipwho.is/{ip}", timeout=2.0)
+            if r.ok:
+                d = r.json()
+                if d.get("success"):
+                    c, city = (d.get("country") or "").strip(), (d.get("city") or "").strip()
+                    label = f"{c} ({city})" if (c and city and city != c) else (c or city)
+        except Exception:
+            pass
+    if not label:
+        try:
+            r = _requests.get(f"https://ipinfo.io/{ip}/json", timeout=2.0)
+            if r.ok:
+                d = r.json()
+                c, city = (d.get("country") or "").strip(), (d.get("city") or "").strip()
+                label = f"{c} ({city})" if (c and city and city != c) else (c or city)
+        except Exception:
+            pass
     if len(_geo_cache) > 2000:
         _geo_cache.clear()
     if label:
@@ -396,6 +408,10 @@ def file_too_large(e):
 
 @app.route("/")
 def home():
+    try:
+        record_activity(_extract_user_from_request(), "زيارة المنصة", "فتح الصفحة الرئيسية")
+    except Exception:
+        pass
     return render_template("index.html")
 
 
@@ -476,7 +492,15 @@ def api_admin_overview():
     adm, err = _verify_admin_request()
     if not adm:
         return jsonify({"success": False, "error": err}), 401
-    return jsonify({"success": True, "admin": adm, "data": get_admin_overview()})
+    ov = get_admin_overview()
+    for u in ov.get("users", []):
+        fn = str(u.get("full_name") or "")
+        uid = str(u.get("user_id") or "")
+        if fn.startswith("زائر (") and uid.startswith("web_"):
+            geo = _lookup_geo(uid[4:])
+            if geo:
+                u["full_name"] = f"🌐 زائر — 🌍 {geo}"
+    return jsonify({"success": True, "admin": adm, "data": ov})
 
 
 @app.route("/api/admin/user-ban", methods=["POST"])
