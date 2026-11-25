@@ -109,6 +109,67 @@ def _prune_trackers(now: float):
             _failed_login_tracker.pop(k, None)
 
 
+import re as _re
+import requests as _requests
+
+_geo_cache = {}
+
+def _detect_device_name() -> str:
+    ua = request.headers.get("User-Agent") or ""
+    ch_model = (request.headers.get("Sec-CH-UA-Model") or "").strip().strip('"').strip("'")
+    if ch_model and ch_model.lower() not in ("k", "unknown"):
+        if ch_model.upper().startswith(("SM-", "GT-", "SC-")):
+            return f"📱 Samsung {ch_model}"
+        return f"📱 {ch_model}"
+    if "iPhone" in ua:
+        return "📱 iPhone"
+    if "iPad" in ua:
+        return "📱 iPad"
+    if "Android" in ua:
+        m = _re.search(r"Android\s+[^;)]+;\s*([^;)]+)", ua)
+        if m:
+            model = m.group(1).split("Build/")[0].strip()
+            if model and model.lower() not in ("k", "wv", "mobile"):
+                if model.upper().startswith(("SM-", "GT-", "SC-")):
+                    return f"📱 Samsung {model}"
+                return f"📱 {model}"
+        return "📱 Android"
+    if "Windows" in ua:
+        return "💻 Windows PC"
+    if "Macintosh" in ua or "Mac OS" in ua:
+        return "💻 Mac"
+    if "Linux" in ua:
+        return "💻 Linux"
+    return "🌐 متصفح ويب"
+
+def _lookup_geo(ip: str) -> str:
+    if not ip or ip.startswith(("127.", "10.", "192.168.", "::1", "localhost")):
+        return "محلي"
+    if ip in _geo_cache:
+        return _geo_cache[ip]
+    country_hdr = (request.headers.get("CF-IPCountry") or request.headers.get("X-Country-Code") or "").strip()
+    label = ""
+    try:
+        r = _requests.get(
+            f"http://ip-api.com/json/{ip}?fields=status,country,city&lang=ar",
+            timeout=1.5,
+        )
+        if r.ok:
+            d = r.json()
+            if d.get("status") == "success":
+                c = (d.get("country") or "").strip()
+                city = (d.get("city") or "").strip()
+                label = f"{c} ({city})" if (c and city and city != c) else (c or city)
+    except Exception:
+        pass
+    if not label and country_hdr and country_hdr != "XX":
+        label = country_hdr
+    if len(_geo_cache) > 2000:
+        _geo_cache.clear()
+    if label:
+        _geo_cache[ip] = label
+    return label
+
 def _extract_user_from_request() -> dict:
     ip = _client_ip()
     uid = (request.headers.get("X-Zoro-User-Id") or "").strip()
@@ -117,9 +178,13 @@ def _extract_user_from_request() -> dict:
 
     if not uid:
         uid = f"web_{ip}"
+    if not fname:
+        device = _detect_device_name()
+        geo = _lookup_geo(ip)
+        fname = f"{device} — 🌍 {geo}" if geo else f"{device} ({ip})"
     return {
         "user_id": uid[:64],
-        "full_name": (fname or f"زائر ({ip})")[:100],
+        "full_name": fname[:100],
         "source": src[:20] or "web",
     }
 
@@ -293,6 +358,7 @@ def security_gatekeeper():
 @app.after_request
 def apply_security_headers(response):
     response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Accept-CH"] = "Sec-CH-UA-Model, Sec-CH-UA-Platform"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
