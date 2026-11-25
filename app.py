@@ -115,33 +115,95 @@ import requests as _requests
 
 _geo_cache = {}
 
+_DEVICE_MAP = {
+    "SM-S938": "Samsung Galaxy S25 Ultra", "SM-S936": "Samsung Galaxy S25+", "SM-S931": "Samsung Galaxy S25",
+    "SM-S928": "Samsung Galaxy S24 Ultra", "SM-S926": "Samsung Galaxy S24+", "SM-S921": "Samsung Galaxy S24",
+    "SM-S918": "Samsung Galaxy S23 Ultra", "SM-S916": "Samsung Galaxy S23+", "SM-S911": "Samsung Galaxy S23",
+    "SM-S908": "Samsung Galaxy S22 Ultra", "SM-S906": "Samsung Galaxy S22+", "SM-S901": "Samsung Galaxy S22",
+    "SM-G998": "Samsung Galaxy S21 Ultra", "SM-G996": "Samsung Galaxy S21+", "SM-G991": "Samsung Galaxy S21",
+    "SM-G990": "Samsung Galaxy S21 FE", "SM-S711": "Samsung Galaxy S23 FE", "SM-S721": "Samsung Galaxy S24 FE",
+    "SM-G988": "Samsung Galaxy S20 Ultra", "SM-G986": "Samsung Galaxy S20+", "SM-G981": "Samsung Galaxy S20",
+    "SM-G980": "Samsung Galaxy S20", "SM-G975": "Samsung Galaxy S10+", "SM-G973": "Samsung Galaxy S10",
+    "SM-G970": "Samsung Galaxy S10e", "SM-G965": "Samsung Galaxy S9+", "SM-G960": "Samsung Galaxy S9",
+    "SM-N986": "Samsung Galaxy Note 20 Ultra", "SM-N981": "Samsung Galaxy Note 20",
+    "SM-N975": "Samsung Galaxy Note 10+", "SM-N970": "Samsung Galaxy Note 10",
+    "SM-F956": "Samsung Galaxy Z Fold 6", "SM-F946": "Samsung Galaxy Z Fold 5", "SM-F936": "Samsung Galaxy Z Fold 4",
+    "SM-F741": "Samsung Galaxy Z Flip 6", "SM-F731": "Samsung Galaxy Z Flip 5",
+    "SM-A556": "Samsung Galaxy A55", "SM-A546": "Samsung Galaxy A54", "SM-A536": "Samsung Galaxy A53",
+    "SM-A525": "Samsung Galaxy A52", "SM-A528": "Samsung Galaxy A52s", "SM-A515": "Samsung Galaxy A51",
+    "SM-A356": "Samsung Galaxy A35", "SM-A346": "Samsung Galaxy A34", "SM-A336": "Samsung Galaxy A33",
+    "SM-A256": "Samsung Galaxy A25", "SM-A245": "Samsung Galaxy A24", "SM-A155": "Samsung Galaxy A15",
+    "SM-A145": "Samsung Galaxy A14", "SM-A135": "Samsung Galaxy A13", "SM-A055": "Samsung Galaxy A05",
+    "SM-A736": "Samsung Galaxy A73", "SM-A725": "Samsung Galaxy A72", "SM-A715": "Samsung Galaxy A71",
+    "24090RA29": "Redmi Note 14 Pro", "2312DRA50": "Redmi Note 13 Pro", "23129RAA4": "Redmi Note 13",
+    "23021RAA2": "Redmi Note 12", "2201117T": "Redmi Note 11", "M2101K6": "Redmi Note 10 Pro",
+    "M2101K7": "Redmi Note 10", "2311DRK48": "POCO X6 Pro", "23122PCD1": "POCO X6",
+}
+
+_AR_COUNTRIES = {
+    "Yemen": "اليمن", "Saudi Arabia": "السعودية", "Egypt": "مصر",
+    "United Arab Emirates": "الإمارات", "Jordan": "الأردن", "Oman": "عُمان",
+    "Kuwait": "الكويت", "Qatar": "قطر", "Bahrain": "البحرين", "Iraq": "العراق",
+    "Syria": "سوريا", "Lebanon": "لبنان", "Palestine": "فلسطين", "Morocco": "المغرب",
+    "Algeria": "الجزائر", "Tunisia": "تونس", "Libya": "ليبيا", "Sudan": "السودان",
+    "Turkey": "تركيا", "United States": "أمريكا", "United Kingdom": "بريطانيا",
+    "Germany": "ألمانيا", "France": "فرنسا", "Netherlands": "هولندا", "India": "الهند",
+}
+
+_AR_CITIES = {
+    "Sanaa": "صنعاء", "Sana'a": "صنعاء", "'Amran": "عمران", "Amran": "عمران",
+    "Aden": "عدن", "Taiz": "تعز", "Taizz": "تعز", "Ibb": "إب",
+    "Al Hudaydah": "الحديدة", "Hodeidah": "الحديدة", "Mukalla": "المكلا",
+    "Dhamar": "ذمار", "Hajjah": "حجة", "Marib": "مأرب", "Saada": "صعدة",
+    "Riyadh": "الرياض", "Jeddah": "جدة", "Mecca": "مكة", "Medina": "المدينة",
+    "Dammam": "الدمام", "Cairo": "القاهرة", "Dubai": "دبي", "Abu Dhabi": "أبوظبي",
+    "Amman": "عمّان", "Muscat": "مسقط", "Doha": "الدوحة", "Baghdad": "بغداد",
+}
+
+def _friendly_model(raw: str) -> str:
+    m = raw.strip()
+    up = m.upper()
+    for code, name in _DEVICE_MAP.items():
+        if up.startswith(code):
+            return name
+    if up.startswith("SM-S"): return f"Samsung Galaxy S ({m})"
+    if up.startswith("SM-A"): return f"Samsung Galaxy A ({m})"
+    if up.startswith("SM-N"): return f"Samsung Galaxy Note ({m})"
+    if up.startswith("SM-M"): return f"Samsung Galaxy M ({m})"
+    if up.startswith("SM-F"): return f"Samsung Galaxy Z ({m})"
+    if up.startswith(("SM-G", "SM-", "GT-")): return f"Samsung Galaxy ({m})"
+    if up.startswith("RMX"): return f"Realme ({m})"
+    if up.startswith("CPH"): return f"OPPO ({m})"
+    if up.startswith(("INFINIX", "X6")): return f"Infinix ({m})"
+    if up.startswith(("TECNO", "KF", "KG", "KI", "KJ", "KL")): return f"TECNO ({m})"
+    if up.startswith(("VOG-", "ELS-", "NOH-", "ANA-", "MAR-", "STK-", "JNY-", "ANY-", "ALI-")): return f"Huawei / Honor ({m})"
+    return m
+
 def _detect_device_name() -> str:
     ua = request.headers.get("User-Agent") or ""
     ch_model = (request.headers.get("Sec-CH-UA-Model") or "").strip().strip('"').strip("'")
     if ch_model and ch_model.lower() not in ("k", "unknown"):
-        if ch_model.upper().startswith(("SM-", "GT-", "SC-")):
-            return f"📱 Samsung {ch_model}"
-        return f"📱 {ch_model}"
+        return f"📱 {_friendly_model(ch_model)}"
     if "iPhone" in ua:
-        return "📱 iPhone"
-    if "iPad" in ua:
-        return "📱 iPad"
+        m = _re.search(r"OS\s+(\d+)[_\.]", ua)
+        return f"📱 iPhone (iOS {m.group(1)})" if m else "📱 iPhone"
+    if "iPad" in ua: return "📱 iPad"
     if "Android" in ua:
         m = _re.search(r"Android\s+[^;)]+;\s*([^;)]+)", ua)
         if m:
             model = m.group(1).split("Build/")[0].strip()
             if model and model.lower() not in ("k", "wv", "mobile"):
-                if model.upper().startswith(("SM-", "GT-", "SC-")):
-                    return f"📱 Samsung {model}"
-                return f"📱 {model}"
-        return "📱 Android"
-    if "Windows" in ua:
-        return "💻 Windows PC"
-    if "Macintosh" in ua or "Mac OS" in ua:
-        return "💻 Mac"
-    if "Linux" in ua:
-        return "💻 Linux"
+                return f"📱 {_friendly_model(model)}"
+        return "📱 جوال Android"
+    if "Windows" in ua: return "💻 كمبيوتر Windows"
+    if "Macintosh" in ua or "Mac OS" in ua: return "💻 جهاز Mac"
+    if "Linux" in ua: return "💻 جهاز Linux"
     return "🌐 متصفح ويب"
+
+def _ar_geo(country: str, city: str) -> str:
+    c = _AR_COUNTRIES.get(country.strip(), country.strip())
+    ct = _AR_CITIES.get(city.strip(), city.strip())
+    return f"{c} ({ct})" if (c and ct and ct != c) else (c or ct)
 
 def _lookup_geo(ip: str) -> str:
     if not ip or ip.startswith(("127.", "10.", "192.168.", "::1", "localhost")):
@@ -154,8 +216,7 @@ def _lookup_geo(ip: str) -> str:
         if r.ok:
             d = r.json()
             if d.get("status") == "success":
-                c, city = (d.get("country") or "").strip(), (d.get("city") or "").strip()
-                label = f"{c} ({city})" if (c and city and city != c) else (c or city)
+                label = _ar_geo(d.get("country") or "", d.get("city") or "")
     except Exception:
         pass
     if not label:
@@ -164,8 +225,7 @@ def _lookup_geo(ip: str) -> str:
             if r.ok:
                 d = r.json()
                 if d.get("success"):
-                    c, city = (d.get("country") or "").strip(), (d.get("city") or "").strip()
-                    label = f"{c} ({city})" if (c and city and city != c) else (c or city)
+                    label = _ar_geo(d.get("country") or "", d.get("city") or "")
         except Exception:
             pass
     if not label:
@@ -173,8 +233,7 @@ def _lookup_geo(ip: str) -> str:
             r = _requests.get(f"https://ipinfo.io/{ip}/json", timeout=2.0)
             if r.ok:
                 d = r.json()
-                c, city = (d.get("country") or "").strip(), (d.get("city") or "").strip()
-                label = f"{c} ({city})" if (c and city and city != c) else (c or city)
+                label = _ar_geo(d.get("country") or "", d.get("city") or "")
         except Exception:
             pass
     if len(_geo_cache) > 2000:
@@ -426,6 +485,9 @@ def _record_home_visit_bg(ip: str, device: str, uid: str, fname: str, src: str):
 def home():
     try:
         ip = _client_ip()
+        ua = (request.headers.get("User-Agent") or "").lower()
+        if ip in ("127.0.0.1", "::1") or any(b in ua for b in ("render", "go-http-client", "uptimerobot")):
+            return render_template("index.html")
         uid = (request.headers.get("X-Zoro-User-Id") or "").strip() or f"web_{ip}"
         fname = (request.headers.get("X-Zoro-Fullname") or "").strip()
         src = (request.headers.get("X-Zoro-Source") or "web").strip()
@@ -518,7 +580,8 @@ def api_admin_overview():
     if not adm:
         return jsonify({"success": False, "error": err}), 401
     ov = get_admin_overview()
-    for u in ov.get("users", []):
+    ov["users"] = [u for u in ov.get("users", []) if u.get("user_id") not in ("web_127.0.0.1", "web_::1")]
+    for u in ov["users"]:
         fn = str(u.get("full_name") or "")
         uid = str(u.get("user_id") or "")
         if fn.startswith("زائر (") and uid.startswith("web_"):

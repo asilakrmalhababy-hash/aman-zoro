@@ -484,30 +484,33 @@
         box.innerHTML = list
             .map(function (u) {
                 const banned = u.is_banned === 1;
+                const ipClean = String(u.user_id || "").replace(/^web_/, "");
                 return (
-                    '<div class="status-row adm-row-wrap">' +
-                    '<div class="status-row-info">' +
-                    "<strong>" +
+                    '<div class="status-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;flex-wrap:nowrap;">' +
+                    '<div class="status-row-info" style="min-width:0;flex:1;display:flex;flex-direction:column;gap:5px;text-align:right;">' +
+                    '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                    '<strong style="font-size:14px;line-height:1.4;word-break:break-word;">' +
                     esc(u.full_name || "زائر") +
-                    ' <span class="badge ' +
+                    "</strong>" +
+                    '<span class="badge ' +
                     (banned ? "danger" : "safe") +
-                    '">' +
+                    '" style="flex-shrink:0;">' +
                     (banned ? "محظور" : "نشط") +
-                    "</span></strong>" +
-                    '<span dir="ltr">ID: ' +
-                    esc(u.user_id) +
-                    " • العمليات: " +
-                    fmtNum(u.actions_count) +
-                    " • آخر ظهور: " +
-                    esc(u.last_seen) +
                     "</span>" +
+                    "</div>" +
+                    '<div style="font-size:12px;opacity:.85;">العمليات: <b>' +
+                    fmtNum(u.actions_count) +
+                    '</b> • آخر ظهور: <span dir="ltr" style="unicode-bidi:embed;">' +
+                    esc(u.last_seen) +
+                    "</span></div>" +
+                    '<div style="font-size:11.5px;opacity:.65;font-family:monospace;" dir="ltr">IP: ' +
+                    esc(ipClean) +
+                    "</div>" +
                     (banned && u.ban_reason
-                        ? '<div class="adm-ban-reason">السبب: ' +
-                        esc(u.ban_reason) +
-                        "</div>"
+                        ? '<div class="adm-ban-reason">السبب: ' + esc(u.ban_reason) + "</div>"
                         : "") +
                     "</div>" +
-                    '<button type="button" style="white-space:nowrap;flex-shrink:0;" class="ghost-btn ' +
+                    '<button type="button" style="white-space:nowrap;flex-shrink:0;padding:8px 14px;min-width:64px;" class="ghost-btn ' +
                     (banned ? "" : "danger-txt") +
                     '" data-ubtn="' +
                     esc(u.user_id) +
