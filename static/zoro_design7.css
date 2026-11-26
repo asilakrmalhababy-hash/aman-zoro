@@ -520,3 +520,154 @@ body {
 #sidebarDrawer .drawer-nav > .drawer-item:not(.zd7-home-bar) {
   display: none !important;
 }
+
+/* === Lock Default Font Size 14px + Full Real Light Mode (v6) === */
+:root, html {
+  --base-font: 14px !important;
+  font-size: 14px !important;
+}
+
+/* Complete Light Theme Override */
+body.light-theme {
+  background: radial-gradient(circle at 85% 6%, rgba(124, 58, 237, 0.09), transparent 38%),
+              radial-gradient(circle at 12% 24%, rgba(16, 185, 129, 0.09), transparent 36%),
+              #F1F5F9 !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .topbar {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .topbar .page-sub,
+body.light-theme #currentPageLabel {
+  color: #475569 !important;
+}
+
+body.light-theme .icon-btn,
+body.light-theme .back-btn,
+body.light-theme .ghost-btn {
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .zd7-title {
+  background: linear-gradient(135deg, #0F172A 15%, #6D28D9 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+body.light-theme .zd7-sub,
+body.light-theme .zd7-tab-hint {
+  color: #475569 !important;
+}
+
+body.light-theme .zd7-tabs,
+body.light-theme .mode-switch-bar {
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06) !important;
+}
+
+body.light-theme .zd7-tab,
+body.light-theme .mode-pill {
+  color: #475569 !important;
+}
+
+body.light-theme .zd7-tab.active,
+body.light-theme .mode-pill.active {
+  color: #FFFFFF !important;
+}
+
+body.light-theme .zd7-card,
+body.light-theme .page-view:not(#page-dashboard) .panel {
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06) !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .zd7-card-content h3,
+body.light-theme .panel h2,
+body.light-theme .panel h3,
+body.light-theme .field-label,
+body.light-theme .page-head h2 {
+  color: #0F172A !important;
+}
+
+body.light-theme .zd7-card-content p,
+body.light-theme .field-hint,
+body.light-theme .panel p {
+  color: #475569 !important;
+}
+
+body.light-theme .zd7-card-ico,
+body.light-theme .zd7-svg-ico,
+body.light-theme .zd7-sub-ico {
+  background: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+}
+
+body.light-theme .pill-em { background: rgba(16, 185, 129, 0.14) !important; color: #047857 !important; }
+body.light-theme .pill-cy { background: rgba(14, 165, 233, 0.14) !important; color: #0369A1 !important; }
+body.light-theme .pill-pu { background: rgba(124, 58, 237, 0.14) !important; color: #6D28D9 !important; }
+
+body.light-theme .sidebar-drawer {
+  background: #FFFFFF !important;
+  border-left: 1px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .drawer-header,
+body.light-theme .drawer-footer {
+  border-color: #E2E8F0 !important;
+  color: #475569 !important;
+}
+
+body.light-theme .drawer-brand strong {
+  color: #0F172A !important;
+}
+
+body.light-theme .zd7-home-bar {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(56, 189, 248, 0.12)) !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .zd7-acc-group {
+  background: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+}
+
+body.light-theme .zd7-acc-head {
+  color: #0F172A !important;
+}
+
+body.light-theme .zd7-sub-item {
+  color: #334155 !important;
+}
+
+body.light-theme .zd7-sub-item:hover,
+body.light-theme .zd7-sub-item.active {
+  background: rgba(14, 165, 233, 0.1) !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .text-input,
+body.light-theme .select-input,
+body.light-theme textarea,
+body.light-theme input[type="text"],
+body.light-theme input[type="password"],
+body.light-theme .mono-box {
+  background: #F8FAFC !important;
+  border: 1px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .check-item {
+  background: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
