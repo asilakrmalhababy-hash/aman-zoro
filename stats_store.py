@@ -4,7 +4,12 @@ import os
 import secrets
 import sqlite3
 from contextlib import contextmanager
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+_LOCAL_TZ = timezone(timedelta(hours=3))
+
+def _local_now():
+    return datetime.now(_LOCAL_TZ).replace(tzinfo=None)
 
 try:
     import pymysql
@@ -145,7 +150,7 @@ def _verify_pin_hash(pin: str, stored: str) -> bool:
 
 
 def init_db():
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_str = _local_now().strftime("%Y-%m-%d %H:%M:%S")
     default_pin = os.environ.get("ZORO_ADMIN_PIN", "zoro2026")
 
     with _get_conn() as db:
@@ -389,7 +394,7 @@ def _trim_table_to_200(db, table_name: str):
 
 
 def add_activity_log(user_id: str, full_name: str, action: str, details: str = ""):
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_str = _local_now().strftime("%Y-%m-%d %H:%M:%S")
     with _get_conn() as db:
         db.execute(
             "INSERT INTO activity_logs (user_id, full_name, action, details, created_at) VALUES (?, ?, ?, ?, ?)",
@@ -400,7 +405,7 @@ def add_activity_log(user_id: str, full_name: str, action: str, details: str = "
 
 
 def record_security_event(event_type: str, actor_id: str = "", ip_address: str = "", details: str = ""):
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_str = _local_now().strftime("%Y-%m-%d %H:%M:%S")
     with _get_conn() as db:
         db.execute(
             "INSERT INTO security_events (event_type, actor_id, ip_address, details, created_at) VALUES (?, ?, ?, ?, ?)",
@@ -411,7 +416,7 @@ def record_security_event(event_type: str, actor_id: str = "", ip_address: str =
 
 
 def record_activity(user_info: dict, action: str, details: str = ""):
-    now_dt = datetime.now()
+    now_dt = _local_now()
     now_str = now_dt.strftime("%Y-%m-%d %H:%M:%S")
     day_str = now_dt.strftime("%Y-%m-%d")
     uid = str(user_info.get("user_id") or "web_guest")[:64]
@@ -475,7 +480,7 @@ def ban_ip(ip_address: str, reason: str = "نشاط مشبوه"):
     if ip_obj.is_loopback:
         raise ValueError("لا يمكن حظر عنوان Loopback المحلي (127.0.0.1 / ::1) لحماية وصولك إلى الخادم.")
     ip_clean = ip_obj.compressed
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_str = _local_now().strftime("%Y-%m-%d %H:%M:%S")
     reason_clean = (reason or "نشاط مشبوه")[:160]
     with _get_conn() as db:
         if db.is_mysql:
@@ -494,7 +499,7 @@ def unban_ip(ip_address: str):
 def is_user_banned(user_id: str) -> tuple:
     if not user_id:
         return False, ""
-    now_dt = datetime.now()
+    now_dt = _local_now()
     uid = str(user_id).strip()
     with _get_conn() as db:
         row = db.fetchone("SELECT is_banned, ban_reason, banned_until FROM users WHERE user_id = ?", (uid,))
@@ -515,7 +520,7 @@ def is_user_banned(user_id: str) -> tuple:
 
 
 def set_user_ban(user_id: str, banned: bool, reason: str = "", duration_hours: int = 0, actor_name: str = "Admin"):
-    now_dt = datetime.now()
+    now_dt = _local_now()
     now_str = now_dt.strftime("%Y-%m-%d %H:%M:%S")
     uid = str(user_id).strip()[:64]
     hrs = max(0, int(duration_hours or 0))
@@ -587,7 +592,7 @@ def add_admin_account(username: str, full_name: str, role: str, pin: str, actor_
         raise ValueError("يرجى إدخال الاسم الكامل.")
     if not pin_clean or len(pin_clean) < 4:
         raise ValueError("Password يجب أن يكون 4 خانات على الأقل.")
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_str = _local_now().strftime("%Y-%m-%d %H:%M:%S")
     aid = f"adm_{secrets.token_hex(4)}"
     with _get_conn() as db:
         if db.fetchone("SELECT admin_id FROM admins WHERE lower(trim(username)) = ?", (uname,)):
@@ -654,7 +659,7 @@ def change_admin_pin(admin_id: str, new_pin: str, actor_name: str = "Admin"):
 
 
 def get_last_7_days_chart(db) -> list:
-    today = datetime.now().date()
+    today = _local_now().date()
     days = [(today - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(6, -1, -1)]
     rows = db.fetchall("SELECT day_date, users_count, actions_count FROM daily_activity WHERE day_date IN (?,?,?,?,?,?,?)", days)
     by_day = {r["day_date"]: dict(r) for r in rows}
@@ -666,7 +671,7 @@ def get_last_7_days_chart(db) -> list:
 
 
 def get_admin_overview() -> dict:
-    cutoff_active = (datetime.now() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S")
+    cutoff_active = (_local_now() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S")
     with _get_conn() as db:
         counts = db.fetchone(
             "SELECT COUNT(*) AS total_users, COALESCE(SUM(CASE WHEN last_seen >= ? AND is_banned = 0 THEN 1 ELSE 0 END), 0) AS active_users, COALESCE(SUM(CASE WHEN is_banned = 1 THEN 1 ELSE 0 END), 0) AS banned_users FROM users",
