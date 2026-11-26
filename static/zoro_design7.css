@@ -1238,3 +1238,11 @@ body.light-theme .zoro-credit-label {
 body.light-theme .zoro-designer-name {
   color: #0F172A !important;
 }
+
+/* === v15: Fix Clipped Bottom Tip of Footer Shield SVG === */
+.zoro-credit-ico svg {
+  width: 18px !important;
+  height: 18px !important;
+  overflow: visible !important;
+  transform: translateY(-0.5px);
+}
