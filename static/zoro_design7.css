@@ -1005,251 +1005,151 @@ body.light-theme .zd7-title {
   display: block !important;
 }
 
-/* === v13: Compact Footer Styling + Keep Footer Anchored at Bottom === */
-#page-dashboard {
-  min-height: 76vh;
-}
-
-.zoro-footer {
-  max-width: 560px;
-  margin: 18px auto 22px;
-  padding: 0 12px;
-  display: flex;
-  justify-content: center;
-  background: transparent !important;
-  border: 0 !important;
-}
-
-.zoro-footer-card {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  max-width: 100%;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.94);
-  border: 1px solid rgba(124, 58, 237, 0.36);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
-}
-
-.zoro-credit-box {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.zoro-credit-ico {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(124, 58, 237, 0.16);
-  border: 1px solid rgba(167, 139, 250, 0.4);
-  color: #A78BFA;
-  flex-shrink: 0;
-}
-
-.zoro-credit-ico svg {
-  width: 15px !important;
-  height: 15px !important;
-}
-
-.zoro-credit-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.zoro-credit-label {
-  font-size: 0.68rem;
-  color: #94A3B8;
-}
-
-.zoro-designer-name {
-  font-size: 0.78rem;
-  color: #38BDF8;
-  direction: ltr;
-}
-
-.zoro-contact-icons {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.zoro-icon-link {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  background: rgba(56, 189, 248, 0.12);
-  color: #38BDF8;
-}
-
-.zoro-icon-link.wa {
-  border-color: rgba(16, 185, 129, 0.35);
-  background: rgba(16, 185, 129, 0.14);
-  color: #34D399;
-}
-
-.zoro-icon-link svg {
-  width: 15px !important;
-  height: 15px !important;
-}
-
-.zoro-icon-link span {
-  display: none !important;
-}
-
-body.light-theme .zoro-footer-card {
-  background: #FFFFFF !important;
-  border-color: #CBD5E1 !important;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08) !important;
-}
-
-body.light-theme .zoro-designer-name {
-  color: #0F172A !important;
-}
-
-/* === v14: Balanced Luxury Footer Matching Card Rhythm === */
-#page-dashboard {
-  min-height: 70vh !important;
-}
-
-.zoro-footer {
-  max-width: 560px !important;
-  width: 100% !important;
-  margin: 8px auto 18px !important;
-  padding: 0 16px !important;
-  box-sizing: border-box !important;
-  display: block !important;
-}
-
-.zoro-footer-card {
-  position: relative !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 14px !important;
-  padding: 14px 16px !important;
-  border-radius: 20px !important;
-  background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(17, 28, 51, 0.94)) !important;
-  border: 1px solid rgba(124, 58, 237, 0.34) !important;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.34) !important;
-  overflow: hidden !important;
-}
-
-.zoro-footer-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 14%;
-  right: 14%;
-  height: 2px;
-  border-radius: 99px;
-  background: linear-gradient(90deg, #10B981, #38BDF8, #7C3AED);
-  opacity: 0.85;
-}
-
-.zoro-credit-box {
-  display: flex !important;
-  align-items: center !important;
-  gap: 11px !important;
-  min-width: 0 !important;
-}
-
-.zoro-credit-ico {
-  width: 38px !important;
-  height: 38px !important;
-  border-radius: 13px !important;
-  background: rgba(124, 58, 237, 0.16) !important;
-  border: 1px solid rgba(167, 139, 250, 0.42) !important;
-  color: #A78BFA !important;
-}
-
-.zoro-credit-ico svg {
-  width: 20px !important;
-  height: 20px !important;
-}
-
-.zoro-credit-text {
-  gap: 2px !important;
-}
-
-.zoro-credit-label {
-  font-size: 0.74rem !important;
-  color: #94A3B8 !important;
-  font-weight: 600 !important;
-}
-
-.zoro-designer-name {
-  font-size: 0.92rem !important;
-  font-weight: 800 !important;
-  color: #38BDF8 !important;
-  letter-spacing: 0.01em !important;
-}
-
-.zoro-contact-icons {
-  gap: 8px !important;
-  flex-shrink: 0 !important;
-}
-
-.zoro-icon-link {
-  width: 38px !important;
-  height: 38px !important;
-  border-radius: 12px !important;
-  transition: transform 0.16s ease !important;
-}
-
-.zoro-icon-link:active {
-  transform: scale(0.93) !important;
-}
-
-.zoro-icon-link svg {
-  width: 18px !important;
-  height: 18px !important;
-}
-
-body.light-theme .zoro-footer-card {
-  background: #FFFFFF !important;
-  border-color: #CBD5E1 !important;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07) !important;
-}
-
-body.light-theme .zoro-credit-ico {
-  background: #F1F5F9 !important;
-  border-color: #CBD5E1 !important;
-  color: #6D28D9 !important;
-}
-
-body.light-theme .zoro-credit-label {
-  color: #64748B !important;
-}
-
-body.light-theme .zoro-designer-name {
-  color: #0F172A !important;
-}
-
-/* === v15: Fix Clipped Bottom Tip of Footer Shield SVG === */
-.zoro-credit-ico svg {
-  width: 18px !important;
-  height: 18px !important;
-  overflow: visible !important;
-  transform: translateY(-0.5px);
-}
-
 /* === v16: Fix Admin Dashboard Tabs Contrast in Light Mode === */
 body.light-theme #page-admin .mode-pill,
 body.light-theme #page-admin button[data-admtab],
 body.light-theme #page-admin .adm-tab {
   color: #FFFFFF !important;
+}
+
+/* === v17: Original First Footer Design (Verbatim) === */
+#page-dashboard {
+  min-height: 76vh;
+}
+
+.zoro-footer {
+    max-width: 1380px !important;
+    width: auto !important;
+    margin: 14px auto 16px !important;
+    padding: 0 18px !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.zoro-footer-card {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    padding: 7px 12px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, rgba(12, 18, 34, 0.92), rgba(28, 22, 64, 0.86)) !important;
+    border: 1px solid rgba(139, 92, 246, 0.42) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42), 0 0 14px rgba(124, 58, 237, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.zoro-footer-card::before {
+    display: none !important;
+}
+
+.zoro-credit-box {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.zoro-credit-ico {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    color: #c4b5fd !important;
+    background: linear-gradient(145deg, rgba(124, 58, 237, 0.32), rgba(14, 165, 233, 0.20)) !important;
+    border: 1px solid rgba(167, 139, 250, 0.50) !important;
+    flex-shrink: 0 !important;
+}
+
+.zoro-credit-ico svg {
+    width: 15px !important;
+    height: 15px !important;
+    overflow: visible !important;
+}
+
+.zoro-credit-text {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+}
+
+.zoro-credit-label {
+    font-size: 0.70rem !important;
+    font-weight: 700 !important;
+    color: #94a3b8 !important;
+    white-space: nowrap !important;
+}
+
+.zoro-designer-name {
+    font-family: 'Orbitron', 'JetBrains Mono', sans-serif !important;
+    font-size: 0.76rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em !important;
+    white-space: nowrap !important;
+    background: linear-gradient(90deg, #ffffff 0%, #c4b5fd 52%, #38bdf8 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.zoro-contact-icons {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding-inline-start: 10px !important;
+    border-inline-start: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+.zoro-icon-link {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    text-decoration: none !important;
+}
+
+.zoro-icon-link span {
+    display: none !important;
+}
+
+.zoro-icon-link svg {
+    width: 15px !important;
+    height: 15px !important;
+    display: block !important;
+}
+
+.zoro-icon-link.tg {
+    color: #38bdf8 !important;
+    background: rgba(14, 165, 233, 0.14) !important;
+    border: 1px solid rgba(56, 189, 248, 0.40) !important;
+}
+
+.zoro-icon-link.wa {
+    color: #34d399 !important;
+    background: rgba(16, 185, 129, 0.14) !important;
+    border: 1px solid rgba(52, 211, 153, 0.40) !important;
+}
+
+@media (max-width: 600px) {
+    .zoro-footer {
+        padding: 0 12px !important;
+        justify-content: flex-end !important;
+    }
+    .zoro-footer-card {
+        padding: 6px 10px !important;
+        gap: 8px !important;
+    }
+    .zoro-credit-label {
+        display: none !important;
+    }
+    .zoro-designer-name {
+        font-size: 0.70rem !important;
+    }
 }
