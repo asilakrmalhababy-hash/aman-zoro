@@ -957,3 +957,36 @@ body.light-theme #menuToggleBtn.hamburger-btn {
 .zd7-modal-card {
   animation: zd7PopIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
+/* === v10: Fix Sidebar Scroll-Chaining/Flicker + Light-Mode Brand Contrast === */
+#sidebarDrawer {
+  height: 100dvh !important;
+  min-height: 100vh !important;
+  bottom: 0 !important;
+  overscroll-behavior: contain !important;
+  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+}
+
+#sidebarDrawer .drawer-nav {
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+#sidebarOverlay {
+  overscroll-behavior: contain !important;
+  touch-action: none !important;
+}
+
+/* Crisp, full-contrast brand name in Light Mode (no faded edge!) */
+body.light-theme .brand-name {
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: #0F172A !important;
+  color: #0F172A !important;
+}
+
+body.light-theme .zd7-title {
+  background: linear-gradient(135deg, #0F172A 0%, #4C1D95 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
