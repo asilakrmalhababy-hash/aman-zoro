@@ -14,13 +14,13 @@
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap"
         rel="stylesheet" media="print" onload="this.media=\'all\'">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='zoro_ui_upgrade.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='zoro_polish.css') }}?v=3">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" defer></script>
-    <link rel="stylesheet" href="/static/zoro_design7.css?v=11">
+    <link rel="stylesheet" href="/static/zoro_design7.css?v=12">
 </head>
 
 <body>
+    <script>(function(){try{var p=JSON.parse(localStorage.getItem('zoro_security_prefs_v1')||'{}');if(p.theme==='light')document.body.classList.add('light-theme');if(p.lang==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}}catch(_){}})();</script>
     <div class="bg-ambient" aria-hidden="true"></div>
     <div class="bg-mesh" aria-hidden="true"></div>
 
@@ -552,12 +552,10 @@
     <script src="{{ url_for('static', filename='js/cyber_roadmap.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/guide_encyclopedia.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/platform_settings.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/zoro_ui_upgrade.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/stego_ui.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/zoro_polish.js') }}?v=4" defer></script>
-    <script src="/static/js/zoro_design7.js?v=10" defer></script>
-    <script src="/static/js/zoro_i18n_topbar.js?v=3" defer></script>
-    <script src="/static/js/zoro_files_pro.js?v=1" defer></script>
+    <script src="/static/js/zoro_design7.js?v=12" defer></script>
+    <script src="/static/js/zoro_i18n_topbar.js?v=4" defer></script>
+    <script src="/static/js/zoro_files_pro.js?v=2" defer></script>
 </body>
 
 </html>

@@ -472,11 +472,9 @@
     fixInnerBackButtons();
   }
 
-  if (document.readyState === 'complete') {
-    setTimeout(mountDesign7, 120);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mountDesign7);
   } else {
-    window.addEventListener('load', function () {
-      setTimeout(mountDesign7, 160);
-    });
+    mountDesign7();
   }
 })();

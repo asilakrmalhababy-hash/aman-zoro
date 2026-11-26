@@ -1,3 +1,7 @@
+/* === v12: Zero-FOUC Instant Mount Guard === */
+#page-dashboard:not([data-design7-mounted]) > * { display: none !important; }
+.live-pill { display: none !important; }
+
 /* ZORO SECURITY - Design #7 Pro Reorganized Architecture */
 :root {
   --zd7-bg: #070B14;

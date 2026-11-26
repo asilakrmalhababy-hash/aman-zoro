@@ -349,11 +349,9 @@
     applyLang(prefs.lang);
   }
 
-  if (document.readyState === 'complete') {
-    setTimeout(mountTopbarControls, 160);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mountTopbarControls);
   } else {
-    window.addEventListener('load', function () {
-      setTimeout(mountTopbarControls, 200);
-    });
+    mountTopbarControls();
   }
 })();

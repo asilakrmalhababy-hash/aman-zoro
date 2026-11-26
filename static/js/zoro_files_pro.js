@@ -529,11 +529,9 @@
     });
   }
 
-  if (document.readyState === 'complete') {
-    setTimeout(mountFilesProTabs, 140);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mountFilesProTabs);
   } else {
-    window.addEventListener('load', function () {
-      setTimeout(mountFilesProTabs, 180);
-    });
+    mountFilesProTabs();
   }
 })();
