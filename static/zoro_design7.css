@@ -466,3 +466,57 @@ body {
   width: 16px;
   height: 16px;
 }
+
+/* === Fix Accordion Height & Squishing (v5) === */
+#sidebarDrawer .drawer-nav {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 14px 12px 28px !important;
+}
+
+#sidebarDrawer .zd7-home-bar,
+#sidebarDrawer .zd7-acc-group {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+
+#sidebarDrawer .zd7-home-bar {
+  display: flex !important;
+  min-height: 54px !important;
+}
+
+#sidebarDrawer .zd7-acc-head {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 56px !important;
+  padding: 10px 12px !important;
+  box-sizing: border-box !important;
+}
+
+#sidebarDrawer .zd7-acc-body {
+  display: none !important;
+  max-height: none !important;
+  opacity: 1 !important;
+  padding: 6px 8px 10px !important;
+  border-top: 1px solid rgba(148, 163, 184, 0.12) !important;
+}
+
+#sidebarDrawer .zd7-acc-group.open .zd7-acc-body {
+  display: block !important;
+}
+
+#sidebarDrawer .zd7-sub-item {
+  display: flex !important;
+  min-height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+/* إخفاء أي أزرار قديمة مكررة تضاف من سكربتات سابقة */
+#sidebarDrawer .drawer-nav > .drawer-item:not(.zd7-home-bar) {
+  display: none !important;
+}
