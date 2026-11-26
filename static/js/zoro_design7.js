@@ -25,7 +25,7 @@
     settings: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" stroke="#10B981"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="#A78BFA"/></svg>',
     about: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 3.2v5.4c0 4.8-3.2 8.2-7.5 9.6-4.3-1.4-7.5-4.8-7.5-9.6V6.2L12 3z" stroke="#38BDF8" fill="rgba(56,189,248,0.12)"/><path d="M9 9h6l-6 6h6" stroke="#10B981" stroke-width="2.1"/></svg>',
     admin: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l2-9 4.5 4L12 6l2.5 6L19 8l2 9H3z" stroke="#A78BFA" fill="rgba(124,58,237,0.18)"/><path d="M5 20h14" stroke="#10B981" stroke-width="2.2"/></svg>',
-    theme: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" stroke="#38BDF8" fill="rgba(56,189,248,0.16)"/></svg>',
+    bell: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8.5-3 8.5h18s-3-1.5-3-8.5" stroke="#38BDF8" fill="rgba(56,189,248,0.16)"/><path d="M13.7 20a2 2 0 0 1-3.4 0" stroke="#10B981"/></svg>',
     chev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
   };
 
@@ -80,8 +80,9 @@
   }
 
   function runAction(item) {
-    if (item.action === 'toggleTheme') {
-      toggleThemeNow();
+    if (item.action === 'openNotif') {
+      if (typeof closeSidebar === 'function') closeSidebar();
+      if (typeof window.zoroOpenNotifModal === 'function') window.zoroOpenNotifModal();
       return;
     }
     if (item.scanTab) {
@@ -309,7 +310,7 @@
         items: [
           { page: 'status', label: 'حالة النظام والخدمات', ico: SVG.status },
           hasPage('my-history') ? { page: 'my-history', label: 'سجلي الخاص', ico: SVG.history } : null,
-          { action: 'toggleTheme', label: 'تبديل الوضع (ليلي / نهاري)', ico: SVG.theme },
+          { action: 'openNotif', label: 'الإشعارات والتنبيهات', ico: SVG.bell },
           { page: 'about', label: 'عن ZORO SECURITY', ico: SVG.about },
           { page: 'admin', label: 'لوحة تحكم الأدمن', ico: SVG.admin }
         ].filter(Boolean)

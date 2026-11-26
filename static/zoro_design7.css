@@ -894,3 +894,66 @@ body.light-theme .zd7-modal-card {
 body.light-theme .zd7-modal-title { color: #0F172A !important; }
 body.light-theme .zd7-modal-desc { color: #475569 !important; }
 body.light-theme .zd7-modal-cancel { background: #F8FAFC !important; color: #334155 !important; border-color: #CBD5E1 !important; }
+
+/* === v9: Sleek Morphing Cyber Menu Icon + Smooth Modal Pop === */
+#menuToggleBtn.hamburger-btn {
+  position: relative !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 13px !important;
+  border: 1px solid rgba(56, 189, 248, 0.34) !important;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(17, 28, 51, 0.92)) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+  transition: border-color 0.22s ease, transform 0.16s ease !important;
+}
+
+#menuToggleBtn.hamburger-btn span {
+  display: block !important;
+  height: 2.4px !important;
+  border-radius: 99px !important;
+  background: linear-gradient(90deg, #34D399, #38BDF8) !important;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, width 0.24s ease !important;
+  transform-origin: center !important;
+}
+
+#menuToggleBtn.hamburger-btn span:nth-child(1) { width: 20px !important; }
+#menuToggleBtn.hamburger-btn span:nth-child(2) { width: 14px !important; align-self: flex-end; margin-inline-end: 9px; background: linear-gradient(90deg, #A78BFA, #38BDF8) !important; }
+#menuToggleBtn.hamburger-btn span:nth-child(3) { width: 20px !important; }
+
+#menuToggleBtn.hamburger-btn.is-open {
+  border-color: rgba(16, 185, 129, 0.6) !important;
+}
+
+#menuToggleBtn.hamburger-btn.is-open span:nth-child(1) {
+  width: 20px !important;
+  transform: translateY(7.4px) rotate(45deg) !important;
+}
+
+#menuToggleBtn.hamburger-btn.is-open span:nth-child(2) {
+  opacity: 0 !important;
+  transform: scaleX(0) !important;
+}
+
+#menuToggleBtn.hamburger-btn.is-open span:nth-child(3) {
+  width: 20px !important;
+  transform: translateY(-7.4px) rotate(-45deg) !important;
+}
+
+body.light-theme #menuToggleBtn.hamburger-btn {
+  background: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+}
+
+@keyframes zd7PopIn {
+  from { opacity: 0; transform: scale(0.93) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.zd7-modal-card {
+  animation: zd7PopIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}

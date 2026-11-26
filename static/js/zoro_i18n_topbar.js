@@ -1,6 +1,8 @@
 (function () {
   var STORAGE_KEY = 'zoro_security_prefs_v1';
 
+  var SUN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5" stroke="#FBBF24" fill="rgba(251,191,36,0.2)"/><path d="M12 2.5v2.2M12 19.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" stroke="#FBBF24"/></svg>';
+  var MOON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 13.2A8.5 8.5 0 1 1 10.8 3.5a6.8 6.8 0 0 0 9.7 9.7z" stroke="#38BDF8" fill="rgba(56,189,248,0.18)"/></svg>';
   var BELL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8.5-3 8.5h18s-3-1.5-3-8.5" stroke="#38BDF8" fill="rgba(56,189,248,0.14)"/><path d="M13.7 20a2 2 0 0 1-3.4 0" stroke="#10B981"/></svg>';
   var BELL_ON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8.5-3 8.5h18s-3-1.5-3-8.5" stroke="#10B981" fill="rgba(16,185,129,0.22)"/><path d="M13.7 20a2 2 0 0 1-3.4 0" stroke="#38BDF8"/><circle cx="18.5" cy="5.5" r="3" fill="#10B981" stroke="#070B14" stroke-width="1.5"/></svg>';
 
@@ -84,7 +86,7 @@
     'المعرفة والتعلّم': 'Knowledge & Learning',
     'النظام والحساب': 'System & Account',
     'سجلي الخاص': 'My Activity History',
-    'تبديل الوضع (ليلي / نهاري)': 'Switch Theme (Dark / Light)',
+    'الإشعارات والتنبيهات': 'Notifications & Alerts',
     'عن ZORO SECURITY': 'About ZORO SECURITY',
     'لوحة تحكم الأدمن': 'Admin Dashboard',
     'خدمات التشفير': 'Encryption Services',
@@ -210,18 +212,24 @@
   }
 
   function updateButtons() {
-    var notifBtn = document.getElementById('zd7NotifBtn');
+    var themeBtn = document.getElementById('zd7ThemeBtn');
     var langBtn = document.getElementById('zd7LangBtn');
-    var prefs = loadPrefs();
-    if (notifBtn) {
-      notifBtn.innerHTML = prefs.notifEnabled ? BELL_ON_SVG : BELL_SVG;
-      notifBtn.classList.toggle('is-active', prefs.notifEnabled);
-      notifBtn.setAttribute('title', currentLang === 'en' ? 'Notifications' : 'الإشعارات');
+    var isLight = document.body.classList.contains('light-theme');
+    if (themeBtn) {
+      themeBtn.innerHTML = isLight ? MOON_SVG : SUN_SVG;
+      themeBtn.setAttribute('title', isLight ? (currentLang === 'en' ? 'Dark Mode' : 'الوضع الليلي') : (currentLang === 'en' ? 'Light Mode' : 'الوضع النهاري'));
     }
     if (langBtn) {
       langBtn.textContent = currentLang === 'en' ? 'ع' : 'E';
       langBtn.setAttribute('title', currentLang === 'en' ? 'التبديل للعربية' : 'Switch to English');
     }
+  }
+
+  function toggleTheme() {
+    var isLight = !document.body.classList.contains('light-theme');
+    document.body.classList.toggle('light-theme', isLight);
+    savePrefs({ theme: isLight ? 'light' : 'dark' });
+    updateButtons();
   }
 
   function openNotifModal() {
@@ -314,14 +322,27 @@
 
     left.innerHTML =
       '<div class="zd7-top-actions">' +
-        '<button type="button" id="zd7NotifBtn" class="zd7-top-btn" aria-label="الإشعارات"></button>' +
+        '<button type="button" id="zd7ThemeBtn" class="zd7-top-btn" aria-label="تبديل الوضع"></button>' +
         '<button type="button" id="zd7LangBtn" class="zd7-top-btn zd7-lang-btn" aria-label="تبديل اللغة">E</button>' +
       '</div>';
 
-    document.getElementById('zd7NotifBtn').addEventListener('click', openNotifModal);
+    document.getElementById('zd7ThemeBtn').addEventListener('click', toggleTheme);
     document.getElementById('zd7LangBtn').addEventListener('click', function () {
       applyLang(currentLang === 'en' ? 'ar' : 'en');
     });
+
+    window.zoroOpenNotifModal = openNotifModal;
+
+    var drawer = document.getElementById('sidebarDrawer');
+    var menuBtn = document.getElementById('menuToggleBtn');
+    if (drawer && menuBtn && !menuBtn.dataset.zd7Morph) {
+      menuBtn.dataset.zd7Morph = '1';
+      var syncMenuIcon = function () {
+        menuBtn.classList.toggle('is-open', drawer.classList.contains('open'));
+      };
+      new MutationObserver(syncMenuIcon).observe(drawer, { attributes: true, attributeFilter: ['class'] });
+      syncMenuIcon();
+    }
 
     var prefs = loadPrefs();
     document.body.classList.toggle('light-theme', prefs.theme === 'light');
