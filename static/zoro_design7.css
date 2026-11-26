@@ -741,3 +741,156 @@ html[dir="ltr"] .sidebar-drawer {
 html[dir="ltr"] .sidebar-drawer.open {
   transform: translateX(0) !important;
 }
+
+/* === v8: Zero-Lag Mobile GPU Optimization + Single-Line Brand + Custom Notification Modal === */
+*, *::before, *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.topbar {
+  background: rgba(7, 11, 20, 0.97) !important;
+}
+
+body.light-theme .topbar {
+  background: rgba(255, 255, 255, 0.97) !important;
+}
+
+/* Kill heavy background GPU animations & blurs */
+.bg-grid, .ambient-orb, .orb, .hero-glow, body::before, body::after {
+  animation: none !important;
+  filter: none !important;
+}
+
+/* Instant 0ms tap response & no stuck hover/active buttons on mobile */
+button, a, .zd7-card, .zd7-tab, .drawer-item, .zd7-acc-head, .mode-pill, .primary-btn {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.sidebar-drawer {
+  will-change: transform;
+}
+
+/* Single-line crisp ZORO SECURITY title in topbar */
+.brand-btn {
+  min-width: 0 !important;
+  gap: 8px !important;
+}
+
+.brand-meta {
+  min-width: 0 !important;
+}
+
+.brand-name {
+  white-space: nowrap !important;
+  font-size: 0.92rem !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.2 !important;
+  display: block !important;
+}
+
+/* Active Notification Bell Glow */
+#zd7NotifBtn.is-active {
+  border-color: rgba(16, 185, 129, 0.55) !important;
+  background: rgba(16, 185, 129, 0.14) !important;
+}
+
+/* Custom ZORO SECURITY Notification Modal */
+.zd7-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(3, 7, 18, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.zd7-modal-card {
+  width: 100%;
+  max-width: 360px;
+  background: linear-gradient(155deg, #0F172A, #090F1E);
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  border-radius: 24px;
+  padding: 24px 20px 20px;
+  text-align: center;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55), 0 0 24px rgba(124, 58, 237, 0.18);
+}
+
+.zd7-modal-ico {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 18px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zd7-modal-ico svg {
+  width: 28px;
+  height: 28px;
+}
+
+.zd7-modal-title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #F8FAFC;
+}
+
+.zd7-modal-desc {
+  margin: 0 0 18px;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: #94A3B8;
+}
+
+.zd7-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.zd7-modal-primary {
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #10B981, #0EA5E9);
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.zd7-modal-primary.is-off {
+  background: linear-gradient(135deg, #7C3AED, #EC4899);
+}
+
+.zd7-modal-cancel {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.6);
+  color: #CBD5E1;
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+body.light-theme .zd7-modal-card {
+  background: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+}
+
+body.light-theme .zd7-modal-title { color: #0F172A !important; }
+body.light-theme .zd7-modal-desc { color: #475569 !important; }
+body.light-theme .zd7-modal-cancel { background: #F8FAFC !important; color: #334155 !important; border-color: #CBD5E1 !important; }

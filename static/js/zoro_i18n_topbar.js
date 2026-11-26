@@ -1,8 +1,8 @@
 (function () {
   var STORAGE_KEY = 'zoro_security_prefs_v1';
 
-  var SUN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5" stroke="#FBBF24" fill="rgba(251,191,36,0.2)"/><path d="M12 2.5v2.2M12 19.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" stroke="#FBBF24"/></svg>';
-  var MOON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 13.2A8.5 8.5 0 1 1 10.8 3.5a6.8 6.8 0 0 0 9.7 9.7z" stroke="#38BDF8" fill="rgba(56,189,248,0.18)"/></svg>';
+  var BELL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8.5-3 8.5h18s-3-1.5-3-8.5" stroke="#38BDF8" fill="rgba(56,189,248,0.14)"/><path d="M13.7 20a2 2 0 0 1-3.4 0" stroke="#10B981"/></svg>';
+  var BELL_ON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8.5-3 8.5h18s-3-1.5-3-8.5" stroke="#10B981" fill="rgba(16,185,129,0.22)"/><path d="M13.7 20a2 2 0 0 1-3.4 0" stroke="#38BDF8"/><circle cx="18.5" cy="5.5" r="3" fill="#10B981" stroke="#070B14" stroke-width="1.5"/></svg>';
 
   var DICT = {
     'الرئيسية': 'Home',
@@ -143,10 +143,11 @@
       return {
         theme: p.theme === 'light' ? 'light' : 'dark',
         lang: p.lang === 'en' ? 'en' : 'ar',
+        notifEnabled: !!p.notifEnabled,
         fontSize: 14
       };
     } catch (_) {
-      return { theme: 'dark', lang: 'ar', fontSize: 14 };
+      return { theme: 'dark', lang: 'ar', notifEnabled: false, fontSize: 14 };
     }
   }
 
@@ -157,6 +158,16 @@
       Object.assign(p, patch, { fontSize: 14 });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
     } catch (_) {}
+  }
+
+  function showMiniToast(msg) {
+    var t = document.getElementById('toast');
+    if (t) {
+      t.textContent = msg;
+      t.classList.remove('hidden');
+      clearTimeout(window._zd7ToastT);
+      window._zd7ToastT = setTimeout(function () { t.classList.add('hidden'); }, 2600);
+    }
   }
 
   function translateTree(root, lang) {
@@ -171,9 +182,7 @@
       var raw = node.nodeValue;
       if (!raw || !raw.trim()) continue;
 
-      if (!origText.has(node)) {
-        origText.set(node, raw);
-      }
+      if (!origText.has(node)) origText.set(node, raw);
       var arVal = origText.get(node);
       var key = arVal.trim();
 
@@ -184,8 +193,8 @@
           var target = lead + DICT[key] + trail;
           if (node.nodeValue !== target) node.nodeValue = target;
         }
-      } else {
-        if (node.nodeValue !== arVal) node.nodeValue = arVal;
+      } else if (node.nodeValue !== arVal) {
+        node.nodeValue = arVal;
       }
     }
 
@@ -201,17 +210,71 @@
   }
 
   function updateButtons() {
-    var themeBtn = document.getElementById('zd7ThemeBtn');
+    var notifBtn = document.getElementById('zd7NotifBtn');
     var langBtn = document.getElementById('zd7LangBtn');
-    var isLight = document.body.classList.contains('light-theme');
-    if (themeBtn) {
-      themeBtn.innerHTML = isLight ? MOON_SVG : SUN_SVG;
-      themeBtn.setAttribute('title', isLight ? (currentLang === 'en' ? 'Dark Mode' : 'الوضع الليلي') : (currentLang === 'en' ? 'Light Mode' : 'الوضع النهاري'));
+    var prefs = loadPrefs();
+    if (notifBtn) {
+      notifBtn.innerHTML = prefs.notifEnabled ? BELL_ON_SVG : BELL_SVG;
+      notifBtn.classList.toggle('is-active', prefs.notifEnabled);
+      notifBtn.setAttribute('title', currentLang === 'en' ? 'Notifications' : 'الإشعارات');
     }
     if (langBtn) {
       langBtn.textContent = currentLang === 'en' ? 'ع' : 'E';
       langBtn.setAttribute('title', currentLang === 'en' ? 'التبديل للعربية' : 'Switch to English');
     }
+  }
+
+  function openNotifModal() {
+    var existing = document.getElementById('zd7NotifOverlay');
+    if (existing) existing.remove();
+
+    var prefs = loadPrefs();
+    var isEn = currentLang === 'en';
+    var enabled = prefs.notifEnabled;
+
+    var title = enabled
+      ? (isEn ? 'Notifications Enabled' : 'الإشعارات مفعّلة بنجاح')
+      : (isEn ? 'Enable ZORO SECURITY Alerts' : 'تفعيل إشعارات ZORO SECURITY');
+    var desc = enabled
+      ? (isEn
+          ? 'You are receiving instant security alerts and scan updates from ZORO SECURITY. You can pause them anytime.'
+          : 'أنت تستقبل حالياً التنبيهات الأمنية الفورية وتحديثات الفحص من ZORO SECURITY. يمكنك إيقافها في أي وقت.')
+      : (isEn
+          ? 'Allow ZORO SECURITY to send you instant security alerts, scan results, and important updates?'
+          : 'هل تسمح لمنصة ZORO SECURITY بإرسال تنبيهات أمنية فورية ونتائج الفحص والتحديثات المهمة؟');
+    var primaryTxt = enabled
+      ? (isEn ? 'Disable Notifications' : 'إيقاف الإشعارات')
+      : (isEn ? 'Allow Notifications' : 'السماح بالإشعارات');
+    var cancelTxt = isEn ? 'Close' : 'لاحقاً';
+
+    var overlay = document.createElement('div');
+    overlay.id = 'zd7NotifOverlay';
+    overlay.className = 'zd7-modal-overlay';
+    overlay.innerHTML =
+      '<div class="zd7-modal-card" role="dialog" aria-modal="true">' +
+        '<div class="zd7-modal-ico">' + (enabled ? BELL_ON_SVG : BELL_SVG) + '</div>' +
+        '<h3 class="zd7-modal-title">' + title + '</h3>' +
+        '<p class="zd7-modal-desc">' + desc + '</p>' +
+        '<div class="zd7-modal-actions">' +
+          '<button type="button" id="zd7NotifConfirm" class="zd7-modal-primary ' + (enabled ? 'is-off' : '') + '">' + primaryTxt + '</button>' +
+          '<button type="button" id="zd7NotifCancel" class="zd7-modal-cancel">' + cancelTxt + '</button>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+
+    function close() { overlay.remove(); }
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    document.getElementById('zd7NotifCancel').addEventListener('click', close);
+    document.getElementById('zd7NotifConfirm').addEventListener('click', function () {
+      var nextState = !enabled;
+      savePrefs({ notifEnabled: nextState });
+      updateButtons();
+      close();
+      showMiniToast(nextState
+        ? (isEn ? 'ZORO SECURITY notifications enabled ✓' : 'تم تفعيل إشعارات ZORO SECURITY بنجاح ✓')
+        : (isEn ? 'Notifications paused' : 'تم إيقاف الإشعارات'));
+    });
   }
 
   function stopObserver() {
@@ -228,7 +291,7 @@
       if (mutTimer) clearTimeout(mutTimer);
       mutTimer = setTimeout(function () {
         if (currentLang === 'en') translateTree(document.body, 'en');
-      }, 60);
+      }, 90);
     });
     observer.observe(document.body, { childList: true, subtree: true });
   }
@@ -244,25 +307,18 @@
     if (currentLang === 'en') startObserver();
   }
 
-  function toggleTheme() {
-    var isLight = !document.body.classList.contains('light-theme');
-    document.body.classList.toggle('light-theme', isLight);
-    savePrefs({ theme: isLight ? 'light' : 'dark' });
-    updateButtons();
-  }
-
   function mountTopbarControls() {
     var left = document.querySelector('.topbar-left');
-    if (!left || left.dataset.zd7ControlsMounted) return;
-    left.dataset.zd7ControlsMounted = '1';
+    if (!left || left.dataset.zd7ControlsMounted === '2') return;
+    left.dataset.zd7ControlsMounted = '2';
 
     left.innerHTML =
       '<div class="zd7-top-actions">' +
-        '<button type="button" id="zd7ThemeBtn" class="zd7-top-btn" aria-label="تبديل الوضع"></button>' +
+        '<button type="button" id="zd7NotifBtn" class="zd7-top-btn" aria-label="الإشعارات"></button>' +
         '<button type="button" id="zd7LangBtn" class="zd7-top-btn zd7-lang-btn" aria-label="تبديل اللغة">E</button>' +
       '</div>';
 
-    document.getElementById('zd7ThemeBtn').addEventListener('click', toggleTheme);
+    document.getElementById('zd7NotifBtn').addEventListener('click', openNotifModal);
     document.getElementById('zd7LangBtn').addEventListener('click', function () {
       applyLang(currentLang === 'en' ? 'ar' : 'en');
     });
@@ -273,10 +329,10 @@
   }
 
   if (document.readyState === 'complete') {
-    setTimeout(mountTopbarControls, 220);
+    setTimeout(mountTopbarControls, 160);
   } else {
     window.addEventListener('load', function () {
-      setTimeout(mountTopbarControls, 260);
+      setTimeout(mountTopbarControls, 200);
     });
   }
 })();
