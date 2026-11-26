@@ -14,6 +14,9 @@
     'زورو للأمان': 'ZORO SECURITY',
     'حماية متكاملة': 'Complete Protection',
     'منصة ويب مستقلة': 'Independent Web Platform',
+    'تصميم وفكرة': 'Designed by',
+    'ZORO SECURITY • سهل الاستخدام. قوي في الحماية.': 'ZORO SECURITY • Easy to use. Strong protection.',
+    'سهل الاستخدام. قوي في الحماية.': 'Easy to use. Strong protection.',
     'التشفير': 'Encrypt',
     'الفحص': 'Scan',
     'الأدوات': 'Tools',
@@ -90,46 +93,233 @@
     'عن ZORO SECURITY': 'About ZORO SECURITY',
     'لوحة تحكم الأدمن': 'Admin Dashboard',
     'خدمات التشفير': 'Encryption Services',
-    'تحديث الفحص ↻': 'Refresh Status ↻',
-    'الخدمات النشطة حالياً': 'Currently Active Services',
+    'تشفير ملف أو صورة': 'Encrypt File / Image',
+    'فك تشفير ملف (.zoro)': 'Decrypt (.zoro) File',
+    'إخفاء النصوص': 'Hide Text',
+    'تحويل الصور': 'Image Converter',
+    'اسحب الصورة أو الملف وأفلته هنا، أو اضغط للاختيار': 'Drag & drop image or file here, or tap to choose',
+    'صور (PNG, JPG, WEBP)، مستندات (PDF, DOCX)، أرشيفات (ZIP)، صوت (MP3) • حتى 100 MB': 'Images (PNG, JPG, WEBP), Docs (PDF, DOCX), Archives (ZIP), Audio (MP3) • up to 100 MB',
+    'الملف المحدد': 'Selected File',
+    'استبدال': 'Replace',
+    'إزالة': 'Remove',
+    'خوارزمية التشفير': 'Encryption Algorithm',
+    'كلمة مرور التشفير': 'Encryption Password',
+    'تشفير الملف': 'Encrypt File',
+    'فك تشفير الملف': 'Decrypt File',
+    'حالة الملف والنتيجة': 'File Status & Result',
+    'تم التشفير بنجاح': 'Encrypted Successfully',
+    'تحميل الملف': 'Download File',
+    'اسم الملف:': 'File Name:',
+    'الحجم:': 'Size:',
+    'الخوارزمية:': 'Algorithm:',
+    'بعد التشفير ستحصل على ملف محمي بامتداد': 'After encryption you will get a protected file ending in',
+    'مع إمكانية اختيار مكان الحفظ، وعند فك التشفير ستسترجع ملفك الأصلي بالكامل.': 'and upon decryption you will restore your original file completely.',
+    'يُحفظ اسم الملف وامتداده الأصلي داخل ملف .zoro المشفر بشكل آمن.': 'Original filename & extension are securely stored inside the .zoro file.',
+    'إخفاء واستخراج النصوص داخل الصور': 'Hide & Extract Text Inside Images',
+    'يعمل محلياً داخل جهازك بسرعة فائقة مع تشفير AES-256-GCM بدون رفع الصورة لأي خادم.': 'Runs 100% locally on your device with AES-256-GCM encryption—zero server uploads.',
+    'إخفاء نص في صورة': 'Hide Text in Image',
+    'استخراج نص من صورة': 'Extract Text from Image',
+    'اختر الصورة': 'Choose Image',
+    'النص السري المراد إخفاؤه': 'Secret Message to Hide',
+    'كلمة مرور الحماية (إلزامية)': 'Protection Password (Required)',
+    'إخفاء النص وتجهيز الصورة': 'Hide Text & Generate Image',
+    'استخراج النص المخفي': 'Extract Hidden Text',
+    'نسخ النص': 'Copy Text',
+    'تحميل الصورة المشفّرة (PNG)': 'Download Encrypted Image (PNG)',
+    'تم بنجاح': 'Success',
+    'تحويل الصورة إلى نص والعكس (لواتساب)': 'Image ↔ Text Converter (WhatsApp)',
+    'حوّل أي صورة إلى نص قابل للنسخ والإرسال عبر واتساب، أو استرجع الصورة من النص محلياً خلال لحظات.': 'Convert any image to copyable text for WhatsApp, or restore an image from text locally in seconds.',
+    'تحويل صورة إلى نص': 'Image to Text',
+    'تحويل نص إلى صورة': 'Text to Image',
+    'اختر الدقة (الحد الأقصى للحروف)': 'Select Quality (Max Characters)',
+    'دقة عالية (حتى 65,000 حرف)': 'High Quality (up to 65,000 chars)',
+    'دقة متوسطة (حتى 35,000 حرف)': 'Medium Quality (up to 35,000 chars)',
+    'دقة ضعيفة / سريعة (حتى 8,000 حرف)': 'Fast / Low Quality (up to 8,000 chars)',
+    'كلمة مرور (اختيارية لتشفير النص)': 'Password (Optional Encryption)',
+    'تحويل الصورة إلى نص': 'Convert Image to Text',
+    'جاهز للنسخ': 'Ready to Copy',
+    'الصق النص المحوّل هنا': 'Paste Converted Text Here',
+    'كلمة المرور (فقط إذا كان النص مشفّراً)': 'Password (Only if Encrypted)',
+    'استرجاع الصورة من النص': 'Restore Image from Text',
+    'تحميل الصورة': 'Download Image',
+    '⚡ توليد كلمة سر قوية ونسخها': '⚡ Generate & Copy Strong Password',
+    'توليد كلمة سر قوية ونسخها': 'Generate & Copy Strong Password',
+    'تشفير (Encrypt)': 'Encrypt',
+    'فك التشفير (Decrypt)': 'Decrypt',
+    'تشفير النص': 'Encrypt Text',
+    'فك تشفير النص': 'Decrypt Text',
+    'النص المراد تشفيره': 'Text to Encrypt',
+    'النص المشفر': 'Encrypted Text',
+    'مفتاح التشفير': 'Encryption Key',
+    'توليد كلمة مرور ←': 'Generate Password →',
+    'مفاتيح RSA-2048': 'RSA-2048 Keys',
+    'توليد زوج مفاتيح': 'Generate Key Pair',
+    'المفتاح العام (Public Key)': 'Public Key',
+    'المفتاح الخاص (Private Key)': 'Private Key',
+    'تنفيذ التشفير': 'Run Encryption',
+    'منطقة النتيجة': 'Result Area',
+    'نسخ النتيجة': 'Copy Result',
+    'تحميل النتيجة': 'Download Result',
+    'تبديل الوضع': 'Swap Mode',
+    'مسح المحتوى': 'Clear',
+    'حديث وآمن جداً': 'Modern & Highly Secure',
+    'ستظهر النتيجة هنا فور تنفيذ العملية مع أزرار النسخ والتحميل والمسح والتبديل السريع.': 'Results will appear here immediately with Copy, Download, Clear & Swap actions.',
+    'بصمة نص': 'Text Hash',
+    'بصمة ملف': 'File Hash',
+    'مقارنة بصمتين': 'Compare Hashes',
+    'التحقق من ملف': 'Verify File',
+    'خوارزمية التجزئة': 'Hash Algorithm',
+    'النص': 'Text',
+    'توليد البصمة الرقمية': 'Generate Hash',
+    'البصمة الناتجة': 'Generated Hash',
+    'لم يتم توليد بصمة بعد.': 'No hash generated yet.',
+    'اختيار ملف (حتى 100 MB)': 'Select File (up to 100 MB)',
+    'حساب بصمة الملف': 'Calculate File Hash',
+    'بصمة الملف': 'File Hash',
+    'لم يتم اختيار ملف بعد.': 'No file selected yet.',
+    'مقارنة بصمتين رقميتين': 'Compare Two Hashes',
+    'البصمة الأولى': 'First Hash',
+    'البصمة الثانية': 'Second Hash',
+    'مقارنة البصمتين': 'Compare Hashes',
+    'التحقق من سلامة ملف (File Integrity)': 'File Integrity Verification',
+    'اختيار الملف للتحقق': 'Select File to Verify',
+    'البصمة المتوقعة': 'Expected Hash',
+    'التحقق من الملف': 'Verify File',
+    'تنبيه تعليمي: التجزئة (Hashing) عملية': 'Note: Hashing is a',
+    'باتجاه واحد (One-Way)': 'One-Way process',
+    'وليست تشفيراً؛ لا يمكن فك البصمة أو عكسها لاسترجاع النص أو الملف الأصلي.': 'and cannot be reversed to recover the original text or file.',
+    'فحص الروابط (URL Security Scanner)': 'URL Security Scanner',
+    'فحص الملفات (File Security Scanner)': 'File Security Scanner',
+    'محلل قوة كلمات المرور (تحليل محلي فقط)': 'Password Strength Analyzer (Local Only)',
+    'يفحص HTTPS، مؤشرات التصيد، إعادة التوجيه، ويطبّق حماية SSRF ضد العناوين الداخلية.': 'Checks HTTPS, phishing signals, redirects & SSRF protection.',
+    'يفحص البصمة SHA-256، الحجم، وتطابق الامتداد مع البنية الحقيقية للملف.': 'Checks SHA-256 hash, size & file header signature match.',
+    'يتم التحليل بالكامل داخل متصفحك ولا يتم إرسال كلمة المرور إلى أي خادم أو جهة خارجية.': 'Analyzed 100% locally in your browser—your password is never sent anywhere.',
+    'الرابط المراد فحصه': 'URL to Scan',
     'فحص الرابط الآن': 'Scan URL Now',
+    'اختيار ملف للفحص': 'Select File to Scan',
     'فحص الملف الآن': 'Scan File Now',
-    'توليد كلمة مرور': 'Generate Password',
-    'توليد مفتاح تشفير': 'Generate Key',
-    'إنشاء رمز QR': 'Generate QR Code',
-    'تحميل صورة QR (PNG)': 'Download QR (PNG)',
-    'نسخ': 'Copy',
-    'جاهزة': 'Ready',
+    'أدخل كلمة المرور لتحليلها': 'Enter Password to Analyze',
+    'بانتظار الإدخال': 'Waiting for input',
+    'أدخل كلمة مرور لعرض الطول، التنوع، والأنماط.': 'Enter a password to analyze length, diversity & patterns.',
+    'الطول:': 'Length:',
+    'التقييم:': 'Rating:',
+    'الحالة:': 'Status:',
+    'النتيجة:': 'Result:',
+    'تقدير صعوبة التخمين:': 'Crack Resistance:',
+    'يتم التوليد محلياً داخل متصفحك باستخدام مولد عشوائي آمن (CSPRNG).': 'Generated locally in your browser using a cryptographically secure CSPRNG.',
     'طول كلمة المرور': 'Password Length',
     'أحرف كبيرة (A-Z)': 'Uppercase (A-Z)',
     'أحرف صغيرة (a-z)': 'Lowercase (a-z)',
     'أرقام (0-9)': 'Numbers (0-9)',
     'رموز خاصة (!@#$)': 'Symbols (!@#$)',
-    'الرابط المراد فحصه': 'URL to Scan',
-    'المحتوى المراد تحويله لـ QR': 'Text or URL for QR',
+    'توليد كلمة مرور': 'Generate Password',
+    'جاهزة': 'Ready',
+    'نسخ': 'Copy',
+    'مولد المفاتيح التشفيرية (Symmetric Keys)': 'Symmetric Key Generator',
+    'توليد مفاتيح عشوائية خالصة للتشفير المتماثل بصيغتي Hex و Base64.': 'Generate pure random symmetric keys in Hex and Base64 formats.',
     'قوة المفتاح (Key Size)': 'Key Size',
+    '128-bit (16 بايت)': '128-bit (16 bytes)',
+    '256-bit (32 بايت - موصى به)': '256-bit (32 bytes - Recommended)',
+    '512-bit (64 بايت)': '512-bit (64 bytes)',
+    'توليد مفتاح تشفير': 'Generate Key',
     'صيغة Hex': 'Hex Format',
     'صيغة Base64': 'Base64 Format',
-    'فحص الروابط (URL Security Scanner)': 'URL Security Scanner',
-    'فحص الملفات (File Security Scanner)': 'File Security Scanner',
-    'محلل قوة كلمات المرور (تحليل محلي فقط)': 'Password Strength Analyzer (Local Only)',
-    'مولد المفاتيح التشفيرية (Symmetric Keys)': 'Symmetric Key Generator',
+    'حوّل أي نص أو رابط أو مفتاح إلى رمز QR قياسي قابل للمسح بكاميرا الجوال.': 'Convert any text, link or key into a scannable mobile QR code.',
+    'المحتوى المراد تحويله لـ QR': 'Content for QR Code',
+    'إنشاء رمز QR': 'Generate QR Code',
+    'تحميل صورة QR (PNG)': 'Download QR (PNG)',
     'محلل معلومات الملفات': 'File Metadata Analyzer',
-    'تشفير النص': 'Encrypt Text',
-    'فك تشفير النص': 'Decrypt Text',
-    'تشفير الملف': 'Encrypt File',
-    'فك تشفير الملف': 'Decrypt File',
-    'إخفاء نص في صورة': 'Hide Text in Image',
-    'استخراج نص من صورة': 'Extract Text from Image',
-    'تمت العملية بنجاح': 'Operation completed successfully',
-    'ZORO SECURITY • سهل الاستخدام. قوي في الحماية.': 'ZORO SECURITY • Easy to use. Strong protection.'
+    'افحص خصائص أي ملف محلياً (الاسم، الامتداد، النوع، الحجم، وتاريخ التعديل).': 'Inspect any file locally (name, extension, MIME type, size & modified date).',
+    'اختيار ملف لفحص معلوماته': 'Select File to Inspect',
+    'الامتداد:': 'Extension:',
+    'النوع (MIME):': 'Type (MIME):',
+    'آخر تعديل:': 'Last Modified:',
+    'تحديث الفحص ↻': 'Refresh Status ↻',
+    'الخدمات النشطة حالياً': 'Currently Active Services',
+    'جاري فحص حالة الخدمات...': 'Checking services status...',
+    'تحديث ↻': 'Refresh ↻',
+    'تسجيل الخروج': 'Sign Out',
+    'تسجيل الدخول': 'Sign In',
+    'إدارة شاملة للمستخدمين، الصلاحيات، والأمان': 'Complete management of users, roles & security',
+    '1. الرئيسية (Dashboard)': '1. Dashboard',
+    '2. المستخدمون': '2. Users',
+    '3. المسؤولون': '3. Admins',
+    '4. مركز الأمان': '4. Security Center',
+    '5. سجل النشاط': '5. Activity Log',
+    '6. إعدادات المنصة': '6. Platform Settings',
+    'نظرة عامة وحالة الموقع': 'Overview & Site Status',
+    'Online • يعمل بشكل طبيعي': 'Online • Running Normally',
+    'إجمالي المستخدمين': 'Total Users',
+    'المستخدمون النشطون (24س)': 'Active Users (24h)',
+    'إجمالي العمليات': 'Total Operations',
+    'المحظورون': 'Banned',
+    'النشاط خلال آخر 7 أيام': 'Activity (Last 7 Days)',
+    'مستخدمون': 'Users',
+    'عمليات': 'Operations',
+    'تفصيل العمليات': 'Operations Breakdown',
+    'قائمة المستخدمين': 'Users List',
+    'قائمة المسؤولين والصلاحيات': 'Admins & Permissions',
+    'إضافة مسؤول جديد': 'Add New Admin',
+    'إضافة المسؤول': 'Add Admin',
+    'الاسم الكامل': 'Full Name',
+    'الصلاحية': 'Role',
+    'إدارة حظر عناوين IP': 'IP Ban Management',
+    'حظر عنوان IP': 'Ban IP Address',
+    'حظر مستخدم (مؤقت أو دائم)': 'Ban User (Temp or Permanent)',
+    'تنفيذ الحظر': 'Apply Ban',
+    'فك الحظر': 'Unban',
+    'إلغاء الحظر': 'Unban',
+    'حظر': 'Ban',
+    'محظور': 'Banned',
+    'نشط': 'Active',
+    'محمي': 'Protected',
+    'حذف': 'Delete',
+    'محاولات الدخول الفاشلة والأحداث الأمنية': 'Failed Logins & Security Events',
+    'سجل الأنشطة': 'Activity Log',
+    'مسح السجل': 'Clear Log',
+    'إعدادات المنصة والتحكم': 'Platform Settings & Controls',
+    'حفظ الإعدادات': 'Save Settings',
+    'تفعيل وضع الصيانة (Maintenance Mode)': 'Enable Maintenance Mode',
+    'تفعيل أداة تشفير النصوص': 'Enable Text Encryption',
+    'تفعيل أداة تشفير الملفات': 'Enable File Encryption',
+    'تفعيل البصمة الرقمية': 'Enable Hashing Tool',
+    'تفعيل الفاحص الأمني': 'Enable Security Scanner',
+    'الحد الأقصى لحجم الملفات (MB)': 'Max File Size (MB)',
+    'الحد الأقصى للطلبات في الدقيقة (Rate Limit)': 'Max Requests / Min (Rate Limit)',
+    'لا توجد أحداث أمنية مسجلة.': 'No security events logged.',
+    'لا توجد أنشطة مسجلة.': 'No activities logged.',
+    'لا توجد عناوين IP محظورة حالياً.': 'No banned IP addresses.',
+    'لا يوجد مستخدمون مسجلون.': 'No registered users yet.',
+    'تمت العملية بنجاح': 'Operation completed successfully'
   };
+
+  var PARTIAL_RULES = [
+    [/مرحباً،\s*/g, 'Welcome, '],
+    [/\(الأساسي\)/g, '(Primary)'],
+    [/(\d+)\s*حرفاً/g, '$1 chars'],
+    [/(\d[\d,]*)\s*حرف/g, '$1 chars'],
+    [/بايت/g, 'bytes']
+  ];
 
   var PLACEHOLDERS = {
     'أدخل نصاً أو رابطاً...': 'Enter text or URL...',
     'أدخل النص هنا...': 'Enter text here...',
+    'اكتب النص هنا بالعربية أو الإنجليزية...': 'Type text in Arabic or English...',
     'أدخل كلمة المرور...': 'Enter password...',
-    'أدخل مفتاح التشفير...': 'Enter encryption key...'
+    'أدخل كلمة مرور قوية...': 'Enter a strong password...',
+    'اكتب كلمة المرور هنا...': 'Type password here...',
+    'أدخل مفتاح التشفير...': 'Enter encryption key...',
+    'اكتب رسالتك السرية هنا...': 'Write your secret message here...',
+    'اتركها فارغة للتحويل المباشر بدون كلمة سر': 'Leave empty for direct conversion without password',
+    'اتركها فارغة إذا كان بدون كلمة مرور': 'Leave empty if not password-protected',
+    'أدخل النص لحساب بصمته الرقمية...': 'Enter text to calculate hash...',
+    'ألصق البصمة الأولى هنا...': 'Paste first hash here...',
+    'ألصق البصمة الثانية هنا...': 'Paste second hash here...',
+    'أدخل البصمة الصحيحة المتوقعة...': 'Enter expected hash...',
+    'بحث بالاسم أو ID...': 'Search by name or ID...',
+    'سبب الحظر': 'Ban reason',
+    'عنوان IP (مثال: 192.168.1.50)': 'IP address (e.g. 192.168.1.50)',
+    'معرّف المستخدم (User ID)': 'User ID'
   };
 
   var origText = new WeakMap();
@@ -172,6 +362,22 @@
     }
   }
 
+  function translateString(arVal) {
+    var key = arVal.replace(/\s+/g, ' ').trim();
+    if (DICT[key]) {
+      var lead = arVal.match(/^\s*/)[0];
+      var trail = arVal.match(/\s*$/)[0];
+      return lead + DICT[key] + trail;
+    }
+    var out = arVal;
+    var changed = false;
+    for (var i = 0; i < PARTIAL_RULES.length; i++) {
+      var next = out.replace(PARTIAL_RULES[i][0], PARTIAL_RULES[i][1]);
+      if (next !== out) { out = next; changed = true; }
+    }
+    return changed ? out : null;
+  }
+
   function translateTree(root, lang) {
     if (!root) return;
     var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
@@ -186,15 +392,10 @@
 
       if (!origText.has(node)) origText.set(node, raw);
       var arVal = origText.get(node);
-      var key = arVal.trim();
 
       if (lang === 'en') {
-        if (DICT[key]) {
-          var lead = arVal.match(/^\s*/)[0];
-          var trail = arVal.match(/\s*$/)[0];
-          var target = lead + DICT[key] + trail;
-          if (node.nodeValue !== target) node.nodeValue = target;
-        }
+        var tr = translateString(arVal);
+        if (tr !== null && node.nodeValue !== tr) node.nodeValue = tr;
       } else if (node.nodeValue !== arVal) {
         node.nodeValue = arVal;
       }
@@ -299,7 +500,7 @@
       if (mutTimer) clearTimeout(mutTimer);
       mutTimer = setTimeout(function () {
         if (currentLang === 'en') translateTree(document.body, 'en');
-      }, 90);
+      }, 70);
     });
     observer.observe(document.body, { childList: true, subtree: true });
   }
@@ -317,8 +518,8 @@
 
   function mountTopbarControls() {
     var left = document.querySelector('.topbar-left');
-    if (!left || left.dataset.zd7ControlsMounted === '2') return;
-    left.dataset.zd7ControlsMounted = '2';
+    if (!left || left.dataset.zd7ControlsMounted === '5') return;
+    left.dataset.zd7ControlsMounted = '5';
 
     left.innerHTML =
       '<div class="zd7-top-actions">' +

@@ -1246,3 +1246,10 @@ body.light-theme .zoro-designer-name {
   overflow: visible !important;
   transform: translateY(-0.5px);
 }
+
+/* === v16: Fix Admin Dashboard Tabs Contrast in Light Mode === */
+body.light-theme #page-admin .mode-pill,
+body.light-theme #page-admin button[data-admtab],
+body.light-theme #page-admin .adm-tab {
+  color: #FFFFFF !important;
+}
