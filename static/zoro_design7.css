@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&display=swap');
 /* === v12: Zero-FOUC Instant Mount Guard === */
 #page-dashboard:not([data-design7-mounted]) > * { display: none !important; }
 .live-pill { display: none !important; }
@@ -1013,221 +1012,55 @@ body.light-theme #page-admin .adm-tab {
   color: #FFFFFF !important;
 }
 
-/* === v22: Two-Tier 3D Chamfered HUD Signature Card (Raised Shield + Glossy 3D Icons + Big Balanced Name) === */
-#page-dashboard {
-  min-height: 0 !important;
-}
-
-.zd7-wrap {
-  padding-bottom: 12px !important;
-}
+/* === v23: Ultra-Light Compact Square Footer === */
+#page-dashboard { min-height: 0 !important; }
+.zd7-wrap { padding-bottom: 10px !important; }
 
 .zoro-footer {
-  max-width: 560px !important;
+  max-width: 360px !important;
   width: 100% !important;
-  margin: 26px auto 26px !important;
+  margin: 12px auto 22px !important;
   padding: 0 14px !important;
   box-sizing: border-box !important;
   display: block !important;
-  background: transparent !important;
-  border: none !important;
-  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.62)) !important;
 }
 
 .zoro-footer-card {
-  position: relative !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  display: grid !important;
-  grid-template-columns: auto 1fr auto !important;
-  grid-template-rows: auto auto !important;
-  align-items: center !important;
-  column-gap: 12px !important;
-  row-gap: 10px !important;
-  padding: 12px 16px 15px !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  clip-path: none !important;
-  overflow: visible !important;
-}
-
-/* Chamfered 3D HUD background plate behind content so raised shield never clips */
-.zoro-footer-card::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 0 !important;
-  clip-path: polygon(
-    16px 0, calc(100% - 16px) 0,
-    100% 16px, 100% calc(100% - 16px),
-    calc(100% - 16px) 100%, 16px 100%,
-    0 calc(100% - 16px), 0 16px
-  ) !important;
-  background: linear-gradient(165deg, #131D36 0%, #0B1224 55%, #070C18 100%) !important;
-  border-top: 2px solid rgba(56, 189, 248, 0.72) !important;
-  border-left: 1px solid rgba(139, 92, 246, 0.45) !important;
-  border-right: 1px solid rgba(139, 92, 246, 0.45) !important;
-  border-bottom: 3px solid rgba(56, 189, 248, 0.35) !important;
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.14), inset 0 -6px 14px rgba(0, 0, 0, 0.65) !important;
-}
-
-.zoro-footer-card::after {
-  display: none !important;
-}
-
-.zoro-credit-box,
-.zoro-credit-text {
-  display: contents !important;
-}
-
-/* Row 1, Right: Clean Minimal Raised 3D Shield */
-.zoro-credit-ico {
-  grid-column: 1 !important;
-  grid-row: 1 !important;
-  position: relative !important;
-  z-index: 3 !important;
-  margin-top: -28px !important;
-  width: 52px !important;
-  height: 52px !important;
-  border-radius: 16px !important;
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important;
-  color: #E0E7FF !important;
-  background: linear-gradient(145deg, #4C1D95 0%, #1E293B 55%, #0369A1 100%) !important;
-  border: 2px solid rgba(167, 139, 250, 0.78) !important;
-  border-bottom: 4px solid #090D1C !important;
-  box-shadow: 0 8px 18px rgba(124, 58, 237, 0.42), inset 0 2px 0 rgba(255, 255, 255, 0.28) !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 10px 12px !important;
+  border-radius: 14px !important;
+  background: #0F172A !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
 }
 
-.zoro-credit-ico svg {
-  width: 26px !important;
-  height: 26px !important;
-  display: block !important;
-  overflow: visible !important;
+.zoro-credit-box { display: flex !important; align-items: center !important; gap: 9px !important; min-width: 0 !important; }
+.zoro-credit-ico {
+  width: 32px !important; height: 32px !important; border-radius: 9px !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  background: rgba(124, 58, 237, 0.18) !important; border: 1px solid rgba(167, 139, 250, 0.45) !important;
+  color: #C4B5FD !important; flex-shrink: 0 !important;
 }
+.zoro-credit-ico svg { width: 17px !important; height: 17px !important; overflow: visible !important; }
 
-/* Row 1, Center: Clear Arabic Label */
-.zoro-credit-label {
-  grid-column: 2 !important;
-  grid-row: 1 !important;
-  position: relative !important;
-  z-index: 2 !important;
-  display: block !important;
-  font-size: 0.92rem !important;
-  font-weight: 800 !important;
-  color: #CBD5E1 !important;
-  letter-spacing: 0.01em !important;
-  text-align: start !important;
-  padding-top: 2px !important;
-}
+.zoro-credit-text { display: flex !important; flex-direction: column !important; line-height: 1.25 !important; }
+.zoro-credit-label { font-size: 0.68rem !important; color: #94A3B8 !important; font-weight: 600 !important; }
+.zoro-designer-name { font-size: 0.84rem !important; font-weight: 800 !important; color: #F8FAFC !important; direction: ltr !important; white-space: nowrap !important; }
 
-/* Row 1, Left: Glossy Raised 3D WhatsApp & Telegram Buttons */
-.zoro-contact-icons {
-  grid-column: 3 !important;
-  grid-row: 1 !important;
-  position: relative !important;
-  z-index: 2 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  padding: 0 !important;
-  border: none !important;
-}
-
+.zoro-contact-icons { display: flex !important; align-items: center !important; gap: 6px !important; flex-shrink: 0 !important; }
 .zoro-icon-link {
-  width: 38px !important;
-  height: 38px !important;
-  padding: 0 !important;
-  border-radius: 11px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  width: 32px !important; height: 32px !important; border-radius: 9px !important;
+  display: inline-flex !important; align-items: center !important; justify-content: center !important;
   text-decoration: none !important;
-  border-bottom: 3px solid rgba(2, 6, 23, 0.85) !important;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45), inset 0 2px 1px rgba(255, 255, 255, 0.34) !important;
-  transition: transform 0.14s ease !important;
 }
+.zoro-icon-link span { display: none !important; }
+.zoro-icon-link svg { width: 16px !important; height: 16px !important; }
+.zoro-icon-link.tg { background: rgba(56, 189, 248, 0.16) !important; border: 1px solid rgba(56, 189, 248, 0.45) !important; color: #38BDF8 !important; }
+.zoro-icon-link.wa { background: rgba(16, 185, 129, 0.16) !important; border: 1px solid rgba(16, 185, 129, 0.45) !important; color: #34D399 !important; }
 
-.zoro-icon-link:active {
-  transform: translateY(2px) !important;
-}
-
-.zoro-icon-link span {
-  display: none !important;
-}
-
-.zoro-icon-link svg {
-  width: 19px !important;
-  height: 19px !important;
-  display: block !important;
-}
-
-.zoro-icon-link.tg {
-  color: #FFFFFF !important;
-  background: linear-gradient(155deg, #38BDF8 0%, #0284C7 62%, #0C4A6E 100%) !important;
-  border-top: 1px solid #7DD3FC !important;
-  border-left: 1px solid rgba(56, 189, 248, 0.7) !important;
-  border-right: 1px solid rgba(56, 189, 248, 0.7) !important;
-}
-
-.zoro-icon-link.wa {
-  color: #FFFFFF !important;
-  background: linear-gradient(155deg, #34D399 0%, #059669 62%, #064E3B 100%) !important;
-  border-top: 1px solid #6EE7B7 !important;
-  border-left: 1px solid rgba(52, 211, 153, 0.7) !important;
-  border-right: 1px solid rgba(52, 211, 153, 0.7) !important;
-}
-
-/* Row 2, Full Width: Prominent Balanced Designer Name */
-.zoro-designer-name {
-  grid-column: 1 / -1 !important;
-  grid-row: 2 !important;
-  position: relative !important;
-  z-index: 2 !important;
-  display: block !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  text-align: center !important;
-  padding: 9px 14px !important;
-  border-radius: 10px !important;
-  background: rgba(7, 11, 20, 0.62) !important;
-  border: 1px solid rgba(56, 189, 248, 0.24) !important;
-  font-family: 'Orbitron', 'JetBrains Mono', sans-serif !important;
-  font-size: clamp(0.98rem, 4.1vw, 1.24rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.04em !important;
-  white-space: nowrap !important;
-  direction: ltr !important;
-  background-image: linear-gradient(90deg, #FFFFFF 0%, #E0E7FF 45%, #38BDF8 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent !important;
-}
-
-/* Light Mode Polish */
-body.light-theme .zoro-footer {
-  filter: drop-shadow(0 10px 18px rgba(15, 23, 42, 0.14)) !important;
-}
-
-body.light-theme .zoro-footer-card::before {
-  background: linear-gradient(165deg, #FFFFFF 0%, #F5F3FF 55%, #ECFEFF 100%) !important;
-  border-top-color: #7C3AED !important;
-  border-bottom-color: #CBD5E1 !important;
-  box-shadow: inset 0 2px 0 #FFFFFF, inset 0 -4px 10px rgba(15, 23, 42, 0.06) !important;
-}
-
-body.light-theme .zoro-credit-label {
-  color: #334155 !important;
-}
-
-body.light-theme .zoro-designer-name {
-  background-image: linear-gradient(90deg, #0F172A 0%, #6D28D9 55%, #0284C7 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  border-color: rgba(124, 58, 237, 0.22) !important;
-}
+body.light-theme .zoro-footer-card { background: #FFFFFF !important; border-color: #CBD5E1 !important; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important; }
+body.light-theme .zoro-designer-name { color: #0F172A !important; }
+body.light-theme .zoro-credit-ico { background: #F1F5F9 !important; border-color: #CBD5E1 !important; color: #6D28D9 !important; }
