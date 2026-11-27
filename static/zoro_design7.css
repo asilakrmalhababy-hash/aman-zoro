@@ -1209,3 +1209,14 @@ body.light-theme .zoro-designer-name {
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
 }
+
+/* === v21: Pull 3D Footer Closer to Cards === */
+#page-dashboard {
+  min-height: 0 !important;
+}
+.zd7-wrap {
+  padding-bottom: 10px !important;
+}
+.zoro-footer {
+  margin: 8px auto 24px !important;
+}
