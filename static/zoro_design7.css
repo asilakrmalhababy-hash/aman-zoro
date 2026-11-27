@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&display=swap');
 /* === v12: Zero-FOUC Instant Mount Guard === */
 #page-dashboard:not([data-design7-mounted]) > * { display: none !important; }
 .live-pill { display: none !important; }
@@ -1012,37 +1013,36 @@ body.light-theme #page-admin .adm-tab {
   color: #FFFFFF !important;
 }
 
-/* === v18: Legendary Luxury Designer Signature Card === */
+/* === v19: Prestigious Chamfered-Edge Cyber Signature Box (Side-Aligned + Orbitron) === */
 #page-dashboard {
-  min-height: 72vh;
+  min-height: 74vh;
 }
 
 .zoro-footer {
   max-width: 560px !important;
   width: 100% !important;
-  margin: 14px auto 22px !important;
+  margin: 14px auto 20px !important;
   padding: 0 14px !important;
   box-sizing: border-box !important;
   display: flex !important;
-  justify-content: center !important;
+  justify-content: flex-end !important;
   background: transparent !important;
   border: none !important;
 }
 
 .zoro-footer-card {
   position: relative !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  display: flex !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  display: inline-flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
-  gap: 12px !important;
-  padding: 13px 15px !important;
-  border-radius: 18px !important;
-  background: linear-gradient(135deg, #0B1224 0%, #151438 55%, #0C1A2E 100%) !important;
-  border: 1px solid rgba(139, 92, 246, 0.52) !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.48), 0 0 18px rgba(124, 58, 237, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-  overflow: hidden !important;
+  gap: 10px !important;
+  padding: 9px 14px !important;
+  border-radius: 0 !important;
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px) !important;
+  background: linear-gradient(135deg, #0A1122 0%, #17143A 55%, #0B192C 100%) !important;
+  border: 1px solid rgba(139, 92, 246, 0.58) !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5), inset 0 0 18px rgba(124, 58, 237, 0.16) !important;
 }
 
 .zoro-footer-card::before {
@@ -1050,66 +1050,72 @@ body.light-theme #page-admin .adm-tab {
   display: block !important;
   position: absolute !important;
   top: 0 !important;
-  left: 12% !important;
-  right: 12% !important;
+  left: 12px !important;
+  right: 0 !important;
   height: 2px !important;
-  border-radius: 99px !important;
-  background: linear-gradient(90deg, transparent, #10B981, #38BDF8, #A78BFA, transparent) !important;
+  background: linear-gradient(90deg, #38BDF8, #A78BFA, #10B981) !important;
+}
+
+.zoro-footer-card::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 12px !important;
+  height: 1.5px !important;
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.6), rgba(56, 189, 248, 0.4), transparent) !important;
 }
 
 .zoro-credit-box {
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
-  gap: 11px !important;
-  min-width: 0 !important;
+  gap: 8px !important;
 }
 
 .zoro-credit-ico {
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 13px !important;
-  display: flex !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   color: #C4B5FD !important;
-  background: linear-gradient(145deg, rgba(124, 58, 237, 0.34), rgba(14, 165, 233, 0.22)) !important;
-  border: 1px solid rgba(167, 139, 250, 0.55) !important;
-  box-shadow: 0 0 14px rgba(124, 58, 237, 0.28) !important;
+  background: linear-gradient(145deg, rgba(124, 58, 237, 0.36), rgba(14, 165, 233, 0.22)) !important;
+  border: 1px solid rgba(167, 139, 250, 0.58) !important;
   flex-shrink: 0 !important;
 }
 
 .zoro-credit-ico svg {
-  width: 20px !important;
-  height: 20px !important;
+  width: 16px !important;
+  height: 16px !important;
   display: block !important;
   overflow: visible !important;
-  flex-shrink: 0 !important;
 }
 
 .zoro-credit-text {
-  display: flex !important;
+  display: inline-flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
-  gap: 2px !important;
-  min-width: 0 !important;
+  gap: 1px !important;
 }
 
 .zoro-credit-label {
   display: block !important;
-  font-size: 0.72rem !important;
+  font-size: 0.62rem !important;
   font-weight: 700 !important;
   color: #94A3B8 !important;
-  line-height: 1.2 !important;
+  line-height: 1.1 !important;
 }
 
 .zoro-designer-name {
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 0.86rem !important;
+  font-family: 'Orbitron', 'JetBrains Mono', sans-serif !important;
+  font-size: 0.76rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.02em !important;
+  letter-spacing: 0.05em !important;
   white-space: nowrap !important;
   direction: ltr !important;
-  background: linear-gradient(90deg, #FFFFFF 0%, #C4B5FD 50%, #38BDF8 100%) !important;
+  background: linear-gradient(90deg, #FFFFFF 0%, #C4B5FD 52%, #38BDF8 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
@@ -1119,26 +1125,21 @@ body.light-theme #page-admin .adm-tab {
 .zoro-contact-icons {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 8px !important;
-  padding-inline-start: 11px !important;
-  border-inline-start: 1px solid rgba(148, 163, 184, 0.22) !important;
+  gap: 6px !important;
+  padding-inline-start: 10px !important;
+  border-inline-start: 1px solid rgba(148, 163, 184, 0.28) !important;
   flex-shrink: 0 !important;
 }
 
 .zoro-icon-link {
-  width: 36px !important;
-  height: 36px !important;
+  width: 30px !important;
+  height: 30px !important;
   padding: 0 !important;
-  border-radius: 12px !important;
+  border-radius: 8px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   text-decoration: none !important;
-  transition: transform 0.16s ease !important;
-}
-
-.zoro-icon-link:active {
-  transform: scale(0.92) !important;
 }
 
 .zoro-icon-link span {
@@ -1146,42 +1147,31 @@ body.light-theme #page-admin .adm-tab {
 }
 
 .zoro-icon-link svg {
-  width: 17px !important;
-  height: 17px !important;
+  width: 15px !important;
+  height: 15px !important;
   display: block !important;
 }
 
 .zoro-icon-link.tg {
   color: #38BDF8 !important;
   background: rgba(14, 165, 233, 0.16) !important;
-  border: 1px solid rgba(56, 189, 248, 0.45) !important;
+  border: 1px solid rgba(56, 189, 248, 0.48) !important;
 }
 
 .zoro-icon-link.wa {
   color: #34D399 !important;
   background: rgba(16, 185, 129, 0.16) !important;
-  border: 1px solid rgba(52, 211, 153, 0.45) !important;
+  border: 1px solid rgba(52, 211, 153, 0.48) !important;
 }
 
 body.light-theme .zoro-footer-card {
-  background: linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 55%, #F0F9FF 100%) !important;
-  border-color: rgba(124, 58, 237, 0.35) !important;
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08) !important;
-}
-
-body.light-theme .zoro-credit-ico {
-  background: linear-gradient(145deg, rgba(124, 58, 237, 0.14), rgba(14, 165, 233, 0.12)) !important;
-  border-color: rgba(124, 58, 237, 0.35) !important;
-  color: #6D28D9 !important;
-  box-shadow: none !important;
-}
-
-body.light-theme .zoro-credit-label {
-  color: #64748B !important;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 55%, #ECFEFF 100%) !important;
+  border-color: rgba(124, 58, 237, 0.4) !important;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.1) !important;
 }
 
 body.light-theme .zoro-designer-name {
-  background: linear-gradient(90deg, #0F172A 0%, #6D28D9 60%, #0284C7 100%) !important;
+  background: linear-gradient(90deg, #0F172A 0%, #6D28D9 55%, #0284C7 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
