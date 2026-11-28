@@ -412,13 +412,7 @@
             '<h1 class="zd7-title">زورو للأمان</h1>' +
             '<div class="zd7-sub">حماية متكاملة</div>' +
           '</div>' +
-          '<div class="zd7-shield" aria-hidden="true">' +
-            '<svg viewBox="0 0 64 64" fill="none">' +
-              '<path d="M32 5L9 14.5V30.5C9 45.2 18.8 57.6 32 61C45.2 57.6 55 45.2 55 30.5V14.5L32 5Z" fill="rgba(16,185,129,0.14)" stroke="url(#zd7g)" stroke-width="3"/>' +
-              '<path d="M22 22.5H42L22.5 41.5H42" stroke="#34D399" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>' +
-              '<defs><linearGradient id="zd7g" x1="9" y1="5" x2="55" y2="61" gradientUnits="userSpaceOnUse"><stop stop-color="#34D399"/><stop offset="1" stop-color="#38BDF8"/></linearGradient></defs>' +
-            '</svg>' +
-          '</div>' +
+          '<div class="zd7-shield" aria-hidden="true"><img src="/static/logo.png?v=1" alt="ZORO SECURITY" class="zd7-hero-logo-img"></div>' +
         '</div>' +
         '<div class="zd7-tabs" id="zd7Tabs"></div>' +
         '<div class="zd7-tab-hint" id="zd7TabHint"></div>' +

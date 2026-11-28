@@ -1080,3 +1080,32 @@ body.light-theme .zoro-credit-ico { background: #F1F5F9 !important; border-color
 .zoro-credit-ico, .zoro-icon-link { width: 24px !important; height: 24px !important; border-radius: 7px !important; }
 .zoro-credit-ico svg, .zoro-icon-link svg { width: 13px !important; height: 13px !important; }
 .zoro-contact-icons { gap: 5px !important; padding-inline-start: 7px !important; }
+
+/* === v26: Official 3D Hex Neon Vault Logo Styling === */
+.z-shield-logo {
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 12px !important;
+  background: #070B14 !important;
+}
+.zoro-brand-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 11px !important;
+}
+.zd7-shield {
+  width: 68px !important;
+  height: 68px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  background: #070B14 !important;
+}
+.zd7-hero-logo-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
