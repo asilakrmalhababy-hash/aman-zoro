@@ -493,7 +493,7 @@ def apply_security_headers(response):
         "frame-ancestors 'none'; "
         "base-uri 'self';"
     )
-    if request.path.startswith("/static/"):
+    if request.path.startswith("/static/") or request.path in ("/sw.js", "/manifest.json"):
         response.headers["Cache-Control"] = "public, max-age=86400"
     if request.path.startswith("/api/admin/"):
         response.headers["Cache-Control"] = (
@@ -546,6 +546,22 @@ def _record_home_visit_bg(ip: str, device: str, uid: str, fname: str, src: str):
         pass
 
 _visit_cooldown = {}
+
+
+@app.route("/manifest.json")
+def pwa_manifest():
+    resp = app.send_static_file("manifest.json")
+    resp.headers["Content-Type"] = "application/manifest+json; charset=utf-8"
+    return resp
+
+
+@app.route("/sw.js")
+def pwa_sw():
+    resp = app.send_static_file("sw.js")
+    resp.headers["Content-Type"] = "application/javascript; charset=utf-8"
+    resp.headers["Cache-Control"] = "no-cache"
+    resp.headers["Service-Worker-Allowed"] = "/"
+    return resp
 
 @app.route("/")
 def home():

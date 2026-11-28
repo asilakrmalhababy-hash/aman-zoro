@@ -1,0 +1,27 @@
+{
+  "name": "ZORO SECURITY — زورو للأمان",
+  "short_name": "ZORO SECURITY",
+  "description": "منصة أمن سيبراني متكاملة للتشفير والفحص والخصوصية — تعمل بدون إنترنت.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070B14",
+  "theme_color": "#070B14",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/static/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

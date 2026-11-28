@@ -1109,3 +1109,34 @@ body.light-theme .zoro-credit-ico { background: #F1F5F9 !important; border-color
   object-fit: cover !important;
   display: block !important;
 }
+
+/* === v27: 1-Tap Offline PWA Install Button === */
+.zd7-pwa-wrap {
+  margin: 0 0 12px;
+}
+.zd7-pwa-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(16, 185, 129, 0.42);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(56, 189, 248, 0.14));
+  color: #E2E8F0;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.zd7-pwa-btn svg {
+  width: 17px;
+  height: 17px;
+  color: #34D399;
+  flex-shrink: 0;
+}
+body.light-theme .zd7-pwa-btn {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(56, 189, 248, 0.12));
+  color: #0F172A;
+}
